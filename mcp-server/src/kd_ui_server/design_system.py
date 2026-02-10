@@ -233,6 +233,43 @@ def get_design_system() -> dict:
                 "hoverBg": "#f0f9ff"
             }
         },
+        "icons": {
+            "library": "lucide",
+            "cdn": "https://unpkg.com/lucide@latest/dist/umd/lucide.js",
+            "size": {
+                "sm": "16",
+                "md": "20",
+                "lg": "24"
+            },
+            "stroke_width": "2",
+            "common": {
+                "dashboard": "layout-dashboard",
+                "analytics": "bar-chart-3",
+                "users": "users",
+                "settings": "settings",
+                "home": "home",
+                "chart": "line-chart",
+                "table": "table",
+                "search": "search",
+                "filter": "filter",
+                "edit": "pencil",
+                "delete": "trash-2",
+                "view": "eye",
+                "dollar": "dollar-sign",
+                "shopping": "shopping-cart",
+                "percentage": "percent",
+                "arrow_up": "trending-up",
+                "arrow_down": "trending-down",
+                "check": "check-circle",
+                "alert": "alert-circle",
+                "info": "info",
+                "menu": "menu",
+                "bell": "bell",
+                "plus": "plus",
+                "minus": "minus",
+                "close": "x"
+            }
+        },
         "best_practices": {
             "contrast": {
                 "description": "Maintain WCAG AA contrast ratio of at least 4.5:1 for normal text",
@@ -251,6 +288,16 @@ def get_design_system() -> dict:
                 "h2": "fontSize.3xl + fontWeight.bold",
                 "h3": "fontSize.2xl + fontWeight.semibold",
                 "body": "fontSize.base + fontWeight.normal"
+            },
+            "shadcn_styling": {
+                "description": "Shadcn-inspired styling approach",
+                "cards": "bg-white border border-gray-200 rounded-lg p-6 shadow-sm",
+                "sidebar": "bg-gray-50 border-r border-gray-200 w-60",
+                "hover_state": "hover:bg-gray-100 transition-colors duration-200",
+                "active_state": "bg-blue-50 text-blue-700",
+                "stat_card": "bg-white border border-gray-200 rounded-lg p-6 shadow-sm",
+                "table_header": "bg-gray-50 text-gray-700 font-medium",
+                "table_row": "border-b border-gray-200 hover:bg-gray-50"
             }
         }
     }

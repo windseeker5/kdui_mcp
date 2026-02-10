@@ -31,6 +31,12 @@ def create_dashboard(layout="sidebar", title="Dashboard", theme="light", compone
         template += _generate_topnav_layout(title, components, theme)
     
     template += '''
+<script>
+  // Initialize Lucide icons
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+  }
+</script>
 {% endblock %}
 '''
     
@@ -72,45 +78,65 @@ def _generate_sidebar_layout(title, components, theme):
     if "stats" in components:
         layout += '''
       <!-- Stats Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
         {% if stats %}
           {% for stat in stats %}
-          <div class="stats shadow">
-            <div class="stat">
-              <div class="stat-title">{{ stat.title }}</div>
-              <div class="stat-value text-primary">{{ stat.value }}</div>
-              <div class="stat-desc">{{ stat.description }}</div>
+          <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+            <div class="flex items-center justify-between mb-1">
+              <p class="text-sm text-gray-600">{{ stat.title }}</p>
+              <i data-lucide="{{ stat.icon }}" class="w-5 h-5 text-blue-600"></i>
             </div>
+            <p class="text-2xl font-bold text-gray-900">{{ stat.value }}</p>
+            <p class="text-xs text-{{ stat.trend_color }}-600 flex items-center gap-1 mt-2">
+              <i data-lucide="{{ stat.trend_icon }}" class="w-3 h-3"></i>
+              <span>{{ stat.description }}</span>
+            </p>
           </div>
           {% endfor %}
         {% else %}
-          <div class="stats shadow">
-            <div class="stat">
-              <div class="stat-title">Total Revenue</div>
-              <div class="stat-value text-primary">$45,231</div>
-              <div class="stat-desc">↗︎ 23% from last month</div>
+          <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+            <div class="flex items-center justify-between mb-1">
+              <p class="text-sm text-gray-600">Total Revenue</p>
+              <i data-lucide="dollar-sign" class="w-5 h-5 text-blue-600"></i>
             </div>
+            <p class="text-2xl font-bold text-gray-900">$45,231</p>
+            <p class="text-xs text-green-600 flex items-center gap-1 mt-2">
+              <i data-lucide="trending-up" class="w-3 h-3"></i>
+              <span>+20.1% from last month</span>
+            </p>
           </div>
-          <div class="stats shadow">
-            <div class="stat">
-              <div class="stat-title">New Users</div>
-              <div class="stat-value text-secondary">1,234</div>
-              <div class="stat-desc">↗︎ 12% from last month</div>
+          <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+            <div class="flex items-center justify-between mb-1">
+              <p class="text-sm text-gray-600">New Users</p>
+              <i data-lucide="users" class="w-5 h-5 text-blue-600"></i>
             </div>
+            <p class="text-2xl font-bold text-gray-900">1,234</p>
+            <p class="text-xs text-green-600 flex items-center gap-1 mt-2">
+              <i data-lucide="trending-up" class="w-3 h-3"></i>
+              <span>+12.5% from last month</span>
+            </p>
           </div>
-          <div class="stats shadow">
-            <div class="stat">
-              <div class="stat-title">Active Sessions</div>
-              <div class="stat-value">567</div>
-              <div class="stat-desc">↘︎ 5% from last month</div>
+          <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+            <div class="flex items-center justify-between mb-1">
+              <p class="text-sm text-gray-600">Active Sessions</p>
+              <i data-lucide="activity" class="w-5 h-5 text-blue-600"></i>
             </div>
+            <p class="text-2xl font-bold text-gray-900">567</p>
+            <p class="text-xs text-red-600 flex items-center gap-1 mt-2">
+              <i data-lucide="trending-down" class="w-3 h-3"></i>
+              <span>-5.2% from last month</span>
+            </p>
           </div>
-          <div class="stats shadow">
-            <div class="stat">
-              <div class="stat-title">Conversion Rate</div>
-              <div class="stat-value text-accent">3.2%</div>
-              <div class="stat-desc">↗︎ 0.3% from last month</div>
+          <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+            <div class="flex items-center justify-between mb-1">
+              <p class="text-sm text-gray-600">Conversion Rate</p>
+              <i data-lucide="percent" class="w-5 h-5 text-blue-600"></i>
             </div>
+            <p class="text-2xl font-bold text-gray-900">3.2%</p>
+            <p class="text-xs text-green-600 flex items-center gap-1 mt-2">
+              <i data-lucide="trending-up" class="w-3 h-3"></i>
+              <span>+0.3% from last month</span>
+            </p>
           </div>
         {% endif %}
       </div>
@@ -120,17 +146,19 @@ def _generate_sidebar_layout(title, components, theme):
         layout += '''
       <!-- Charts -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <div class="card bg-base-100 shadow-xl">
-          <div class="card-body">
-            <h2 class="card-title">Revenue Trend</h2>
-            <canvas id="revenueChart"></canvas>
-          </div>
+        <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+          <h3 class="text-base font-semibold text-gray-900 mb-4 flex items-center gap-2">
+            <i data-lucide="line-chart" class="w-5 h-5 text-blue-600"></i>
+            <span>Revenue Trend</span>
+          </h3>
+          <canvas id="revenueChart"></canvas>
         </div>
-        <div class="card bg-base-100 shadow-xl">
-          <div class="card-body">
-            <h2 class="card-title">User Growth</h2>
-            <canvas id="userChart"></canvas>
-          </div>
+        <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+          <h3 class="text-base font-semibold text-gray-900 mb-4 flex items-center gap-2">
+            <i data-lucide="bar-chart-3" class="w-5 h-5 text-blue-600"></i>
+            <span>User Growth</span>
+          </h3>
+          <canvas id="userChart"></canvas>
         </div>
       </div>
 '''
@@ -138,43 +166,63 @@ def _generate_sidebar_layout(title, components, theme):
     if "table" in components:
         layout += '''
       <!-- Data Table -->
-      <div class="card bg-base-100 shadow-xl">
-        <div class="card-body">
-          <h2 class="card-title">Recent Transactions</h2>
-          <div class="overflow-x-auto">
-            <table class="table table-zebra">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Name</th>
-                  <th>Amount</th>
-                  <th>Status</th>
-                  <th>Date</th>
+      <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+        <h3 class="text-base font-semibold text-gray-900 mb-4">Recent Orders</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead>
+              <tr class="border-b border-gray-200 bg-gray-50">
+                <th class="py-3 px-4 text-left text-sm font-medium text-gray-700">Order ID</th>
+                <th class="py-3 px-4 text-left text-sm font-medium text-gray-700">Customer</th>
+                <th class="py-3 px-4 text-left text-sm font-medium text-gray-700">Amount</th>
+                <th class="py-3 px-4 text-left text-sm font-medium text-gray-700">Status</th>
+                <th class="py-3 px-4 text-left text-sm font-medium text-gray-700">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% if transactions %}
+                {% for transaction in transactions %}
+                <tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors duration-200">
+                  <td class="py-4 px-4 text-sm text-gray-900">{{ transaction.id }}</td>
+                  <td class="py-4 px-4 text-sm text-gray-900">{{ transaction.name }}</td>
+                  <td class="py-4 px-4 text-sm text-gray-900">${{ transaction.amount }}</td>
+                  <td class="py-4 px-4 text-sm">
+                    <span class="px-2 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-md">{{ transaction.status }}</span>
+                  </td>
+                  <td class="py-4 px-4 text-sm text-gray-600">{{ transaction.date }}</td>
                 </tr>
-              </thead>
-              <tbody>
-                {% if transactions %}
-                  {% for transaction in transactions %}
-                  <tr>
-                    <td>{{ transaction.id }}</td>
-                    <td>{{ transaction.name }}</td>
-                    <td>${{ transaction.amount }}</td>
-                    <td><span class="badge badge-success">{{ transaction.status }}</span></td>
-                    <td>{{ transaction.date }}</td>
-                  </tr>
-                  {% endfor %}
-                {% else %}
-                  <tr>
-                    <td>#001</td>
-                    <td>John Doe</td>
-                    <td>$1,234.56</td>
-                    <td><span class="badge badge-success">Completed</span></td>
-                    <td>2024-01-15</td>
-                  </tr>
-                {% endif %}
-              </tbody>
-            </table>
-          </div>
+                {% endfor %}
+              {% else %}
+                <tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors duration-200">
+                  <td class="py-4 px-4 text-sm text-gray-900">#12345</td>
+                  <td class="py-4 px-4 text-sm text-gray-900">John Doe</td>
+                  <td class="py-4 px-4 text-sm text-gray-900">$234.50</td>
+                  <td class="py-4 px-4 text-sm">
+                    <span class="px-2 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-md">Completed</span>
+                  </td>
+                  <td class="py-4 px-4 text-sm text-gray-600">2024-02-10</td>
+                </tr>
+                <tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors duration-200">
+                  <td class="py-4 px-4 text-sm text-gray-900">#12346</td>
+                  <td class="py-4 px-4 text-sm text-gray-900">Jane Smith</td>
+                  <td class="py-4 px-4 text-sm text-gray-900">$589.00</td>
+                  <td class="py-4 px-4 text-sm">
+                    <span class="px-2 py-1 text-xs font-medium text-yellow-700 bg-yellow-100 rounded-md">Processing</span>
+                  </td>
+                  <td class="py-4 px-4 text-sm text-gray-600">2024-02-10</td>
+                </tr>
+                <tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors duration-200">
+                  <td class="py-4 px-4 text-sm text-gray-900">#12347</td>
+                  <td class="py-4 px-4 text-sm text-gray-900">Bob Johnson</td>
+                  <td class="py-4 px-4 text-sm text-gray-900">$123.99</td>
+                  <td class="py-4 px-4 text-sm">
+                    <span class="px-2 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-md">Completed</span>
+                  </td>
+                  <td class="py-4 px-4 text-sm text-gray-600">2024-02-09</td>
+                </tr>
+              {% endif %}
+            </tbody>
+          </table>
         </div>
       </div>
 '''
@@ -186,15 +234,29 @@ def _generate_sidebar_layout(title, components, theme):
   <!-- Sidebar -->
   <div class="drawer-side">
     <label for="main-drawer" class="drawer-overlay"></label>
-    <ul class="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
-      <li class="mb-2">
-        <a class="text-xl font-bold">KD Dashboard</a>
-      </li>
-      <li><a href="/dashboard" class="active"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>Dashboard</a></li>
-      <li><a href="/analytics"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>Analytics</a></li>
-      <li><a href="/users"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>Users</a></li>
-      <li><a href="/settings"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>Settings</a></li>
-    </ul>
+    <aside class="w-60 min-h-full bg-gray-50 border-r border-gray-200">
+      <div class="p-4">
+        <h2 class="text-xl font-bold text-gray-900 mb-6">''' + title + '''</h2>
+        <nav class="space-y-1">
+          <a href="/dashboard" class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-blue-700 bg-blue-50 rounded-md transition-colors duration-200">
+            <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+            <span>Dashboard</span>
+          </a>
+          <a href="/analytics" class="flex items-center gap-3 px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md transition-colors duration-200">
+            <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
+            <span>Analytics</span>
+          </a>
+          <a href="/users" class="flex items-center gap-3 px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md transition-colors duration-200">
+            <i data-lucide="users" class="w-5 h-5"></i>
+            <span>Users</span>
+          </a>
+          <a href="/settings" class="flex items-center gap-3 px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md transition-colors duration-200">
+            <i data-lucide="settings" class="w-5 h-5"></i>
+            <span>Settings</span>
+          </a>
+        </nav>
+      </div>
+    </aside>
   </div>
 </div>
 '''

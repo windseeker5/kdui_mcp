@@ -57,144 +57,145 @@ With KD UI Framework, you get:
 - **Components**: Pre-styled DaisyUI components
 - **Best Practices**: Built-in UI/UX guidelines
 
+---
+
 ## 📦 Installation
 
-### 🚀 Quick Start (Recommended)
-
-**One command to set up everything!**
+### Step 1: Clone the Repository
 
 ```bash
-# Clone the repository
 git clone https://github.com/windseeker5/kdui_mcp.git
 cd kdui_mcp
+```
 
-# Run the interactive setup wizard
+### Step 2: Create Virtual Environment
+
+```bash
+python -m venv venv
+```
+
+### Step 3: Activate Virtual Environment
+
+**Windows (PowerShell):**
+```powershell
+venv\Scripts\activate
+```
+
+**Windows (CMD):**
+```cmd
+venv\Scripts\activate
+```
+
+**Linux/macOS:**
+```bash
+source venv/bin/activate
+```
+
+### Step 4: Configure Proxy (Corporate Networks Only)
+
+If you're behind a corporate proxy, set these environment variables:
+
+**PowerShell:**
+```powershell
+$env:HTTP_PROXY="http://your-proxy:port"
+$env:HTTPS_PROXY="http://your-proxy:port"
+```
+
+**CMD:**
+```cmd
+set HTTP_PROXY=http://your-proxy:port
+set HTTPS_PROXY=http://your-proxy:port
+```
+
+**Linux/macOS:**
+```bash
+export HTTP_PROXY="http://your-proxy:port"
+export HTTPS_PROXY="http://your-proxy:port"
+```
+
+### Step 5: Install Dependencies
+
+```bash
+pip install -e mcp-server
+```
+
+### Step 6: Run Setup Wizard
+
+```bash
 python setup.py
 ```
 
-The setup wizard will:
-- ✅ Create a virtual environment
-- ✅ Install all dependencies
-- ✅ Configure Cline (VS Code) and/or Claude Desktop/Code CLI
-- ✅ Validate the installation
-- ✅ Work on Windows, Linux, and macOS
+The setup wizard will configure the MCP server in your AI tool (Cline or Claude Desktop).
 
-**That's it!** Just restart VS Code or Claude Desktop and you're ready to go! 🎉
+### Step 7: Restart Your AI Tool
 
----
+- **Cline**: Reload VS Code window
+- **Claude Desktop**: Restart the application
 
-### 📝 Manual Installation (Advanced)
-
-If you prefer to set up manually:
-
-#### Prerequisites
-
-- Python 3.10+
-- Node.js 16+ (for Tailwind CSS in your Flask projects)
-
-#### Step 1: Install the MCP Server
-
-```bash
-cd mcp-server
-
-# Create virtual environment
-python -m venv venv
-
-# Activate virtual environment
-# Windows:
-venv\Scripts\activate
-# Mac/Linux:
-# source venv/bin/activate
-
-# Install dependencies
-pip install -e .
-```
-
-#### Step 2: Configure in Your AI Tool
-
-**For Cline (VS Code Extension)**
-
-Add to VS Code `settings.json`:
-
-```json
-{
-  "cline.mcpServers": {
-    "kd-ui": {
-      "command": "/absolute/path/to/mcp-server/venv/Scripts/python.exe",
-      "args": ["-m", "kd_ui_server.server"],
-      "cwd": "/absolute/path/to/mcp-server"
-    }
-  }
-}
-```
-
-**For Claude Desktop/Code CLI**
-
-Add to `claude_desktop_config.json`:
-
-```json
-{
-  "mcpServers": {
-    "kd-ui": {
-      "command": "/absolute/path/to/mcp-server/venv/bin/python",
-      "args": ["-m", "kd_ui_server.server"],
-      "cwd": "/absolute/path/to/mcp-server"
-    }
-  }
-}
-```
+**That's it! You're ready to go! 🎉**
 
 ---
 
-### Step 3: Set Up Your Flask Project with DaisyUI
+## 🚀 Your First Dashboard in 60 Seconds
 
-```bash
-cd your-flask-project
+After completing the setup, let's create a beautiful dashboard to see the framework in action!
 
-# Initialize Node.js
-npm init -y
+### Quick Demo
 
-# Install Tailwind CSS + DaisyUI
-npm install -D tailwindcss daisyui
+1. **Navigate to the example:**
+   ```bash
+   cd examples/first_dashboard
+   pip install flask
+   python app.py
+   ```
 
-# Initialize Tailwind
-npx tailwindcss init
+2. **Open your browser:**
+   Visit **http://localhost:5001** to see a beautiful sales dashboard with:
+   - 📊 Stats cards (Revenue, Orders, Customers, Conversion Rate)
+   - 📈 Revenue trend chart
+   - 📋 Recent orders table
+   - 🎨 Fully responsive design
+
+### Create Your Own Dashboard (Hello World!)
+
+**The Simple Prompt - Copy & Paste This:**
+
+```
+Using the create_dashboard MCP tool, generate a sales dashboard with:
+- Sidebar layout
+- Title: "Sales Dashboard"
+- Components: stats, charts, table
 ```
 
-**Configure `tailwind.config.js`:**
+**Or ask naturally:**
 
-```javascript
-/** @type {import('tailwindcss').Config} */
-module.exports = {
-  content: [
-    "./templates/**/*.html",
-    "./static/**/*.js",
-  ],
-  theme: {
-    extend: {},
-  },
-  plugins: [require("daisyui")],
-  daisyui: {
-    themes: ["light", "dark"],
-  },
-}
+```
+Create a sales dashboard with sidebar navigation, stat cards for revenue/users/sessions/conversion, 
+revenue trend chart, and a recent orders table
 ```
 
-**Create `static/src/input.css`:**
+**What the MCP tool generates:**
 
-```css
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-```
+The tool automatically creates a **Shadcn-quality** Flask template with:
 
-**Build CSS:**
+✅ **Modern Lucide Icons** - Clean, professional icons throughout
+✅ **Shadcn Color Palette** - Blue-600 primary, subtle gray backgrounds
+✅ **Beautiful Stat Cards** - White cards with subtle borders, generous padding (p-6), and shadow-sm
+✅ **Clean Sidebar** - Gray-50 background, active state highlighting, smooth hover transitions  
+✅ **Professional Table** - Horizontal borders only, hover states, color-coded status badges
+✅ **Chart Containers** - Icon headers, proper spacing
+✅ **Inter Font** - Modern, clean typography
+✅ **Fully Responsive** - Mobile drawer, desktop sidebar, responsive grid
 
-```bash
-npx tailwindcss -i ./static/src/input.css -o ./static/dist/output.css --watch
-```
+**The Result: Production-Ready, Shadcn-Quality UI**
 
-## 🎨 Usage
+![Sales Dashboard](examples/first_dashboard/screenshot.png)
+
+No hand-coding needed - the MCP tool generates everything! 🎉
+
+---
+
+## 🎨 Usage Examples
 
 ### Example 1: Create a Dashboard
 
@@ -263,29 +264,40 @@ An interactive table with:
 - Pagination
 - Edit/Delete actions
 
+---
+
 ## 📁 Project Structure
 
 ```
 KD UI Framework/
-├── RESEARCH_AND_OPTIONS.md      # Framework options guide
-├── DECISION_MATRIX.md            # Comparison of approaches
-├── FLASK_INTEGRATION_GUIDE.md   # Flask + DaisyUI setup
 ├── README.md                     # This file
-└── mcp-server/                   # MCP Server
+├── setup.py                      # MCP configuration wizard
+├── SETUP_STEPS.md               # Detailed setup instructions
+├── QUICK_START.md               # Quick reference guide
+├── RESEARCH_AND_OPTIONS.md      # Framework options guide
+├── DECISION_MATRIX.md           # Comparison of approaches
+├── FLASK_INTEGRATION_GUIDE.md   # Flask + DaisyUI setup
+├── examples/                    # Example projects
+│   └── first_dashboard/         # Sales dashboard demo
+│       ├── app.py
+│       ├── templates/
+│       └── README.md
+└── mcp-server/                  # MCP Server
     ├── pyproject.toml
     ├── src/
     │   └── kd_ui_server/
-    │       ├── __init__.py
-    │       ├── server.py         # Main MCP server
-    │       ├── design_system.py  # Color palette, typography, etc.
-    │       ├── resources.py      # Templates and best practices
-    │       └── tools/            # Tool implementations
-    │           ├── dashboard.py  # Dashboard generation
-    │           ├── form.py       # Form generation
-    │           ├── table.py      # Table generation
-    │           └── component.py  # Individual components
-    └── venv/                     # Virtual environment (created during install)
+    │       ├── server.py        # Main MCP server
+    │       ├── design_system.py # Color palette, typography
+    │       ├── resources.py     # Templates and best practices
+    │       └── tools/           # Tool implementations
+    │           ├── dashboard.py
+    │           ├── form.py
+    │           ├── table.py
+    │           └── component.py
+    └── venv/                    # Virtual environment (you create this)
 ```
+
+---
 
 ## 🎯 Design System
 
@@ -308,6 +320,8 @@ KD UI Framework/
 
 Based on 4px units: 4px, 8px, 12px, 16px, 24px, 32px, 48px, 64px
 
+---
+
 ## 🔧 Customization
 
 ### Changing Colors
@@ -329,6 +343,33 @@ Edit `mcp-server/src/kd_ui_server/design_system.py`:
 2. Register in `add_component()` function
 3. Update tool schema in `server.py`
 
+---
+
+## 🐛 Troubleshooting
+
+### Proxy Errors
+If you see "Cannot connect to proxy" or "getaddrinfo failed" errors during installation:
+1. Configure your proxy settings (see Step 4)
+2. Run `pip install -e mcp-server` again
+
+### Virtual Environment Not Activated
+Make sure you see `(venv)` at the beginning of your terminal prompt. If not:
+- Windows: Run `venv\Scripts\activate`
+- Linux/macOS: Run `source venv/bin/activate`
+
+### MCP Server Not Found in Cline/Claude
+1. Check that the setup wizard completed successfully
+2. Restart VS Code or Claude Desktop
+3. Verify the configuration file was updated (setup wizard shows the location)
+
+### Dependencies Not Installing
+If `pip install -e mcp-server` fails:
+1. Make sure your virtual environment is activated
+2. Check your internet connection or proxy settings
+3. Try updating pip: `python -m pip install --upgrade pip`
+
+---
+
 ## 📚 Resources
 
 - [DaisyUI Documentation](https://daisyui.com/)
@@ -337,13 +378,7 @@ Edit `mcp-server/src/kd_ui_server/design_system.py`:
 - [Flask Documentation](https://flask.palletsprojects.com/)
 - [MCP Protocol](https://modelcontextprotocol.io/)
 
-## 🤝 Contributing
-
-This is a personal framework, but feel free to fork and customize for your needs!
-
-## 📄 License
-
-MIT License - Use freely in your projects
+---
 
 ## ✨ Tips for Best Results
 
@@ -353,6 +388,8 @@ MIT License - Use freely in your projects
 4. **Test responsiveness** - Check mobile and desktop views
 5. **Keep it simple** - Don't overcomplicate layouts
 
+---
+
 ## 🎓 Learning Resources
 
 See the following guides in this repository:
@@ -360,36 +397,19 @@ See the following guides in this repository:
 - **RESEARCH_AND_OPTIONS.md** - Deep dive into UI framework options
 - **DECISION_MATRIX.md** - Why we chose this approach
 - **FLASK_INTEGRATION_GUIDE.md** - Detailed Flask + DaisyUI setup
+- **SETUP_STEPS.md** - Detailed step-by-step setup guide
 
-## 🚀 Quick Start Example
+---
 
-**Complete workflow:**
+## 🤝 Contributing
 
-1. Install MCP server (see Installation above)
-2. Configure in your AI tool
-3. In your Flask project, set up Tailwind + DaisyUI
-4. Ask AI: "Using the KD UI Framework, create a dashboard for tracking sales with revenue, orders, and customers stats, plus a revenue chart"
-5. AI uses `create_dashboard` tool
-6. You get a beautiful, responsive dashboard instantly!
+This is a personal framework, but feel free to fork and customize for your needs!
 
-No more ugly AI-generated UIs! 🎉
+---
 
-## 🐛 Troubleshooting
+## 📄 License
 
-### MCP Server Not Found
-- Check virtual environment is activated
-- Verify Python path in config
-- Ensure dependencies are installed (`pip install -e .`)
-
-### Styles Not Applying
-- Make sure Tailwind CSS is built (`npm run build` or `--watch`)
-- Check `output.css` is linked in your base template
-- Verify DaisyUI is in `tailwind.config.js` plugins
-
-### Components Not Rendering
-- Check Jinja2 syntax in templates
-- Verify variables are passed from Flask route
-- Inspect browser console for errors
+MIT License - Use freely in your projects
 
 ---
 

@@ -28,6 +28,13 @@ def add_component(component_type, config=None):
         "tabs": _generate_tabs,
         "progress": _generate_progress,
         "chart_container": _generate_chart_container,
+        # Landing page components
+        "hero": _generate_hero,
+        "features": _generate_features,
+        "testimonials": _generate_testimonials,
+        "pricing": _generate_pricing,
+        "cta": _generate_cta,
+        "footer": _generate_footer,
     }
     
     if component_type in components:
