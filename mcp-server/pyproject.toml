@@ -1,0 +1,33 @@
+[project]
+name = "kd-ui-mcp-server"
+version = "0.1.0"
+description = "MCP Server for generating beautiful Flask/Jinja2 templates with DaisyUI components"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "mcp>=0.9.0",
+    "jinja2>=3.1.0",
+    "rich>=13.0.0",
+    "questionary>=2.0.0",
+    "click>=8.0.0",
+]
+
+[project.scripts]
+kd-ui-setup = "kd_ui_server.cli.setup:main"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "black>=23.0.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/kd_ui_server"]
+
+[tool.black]
+line-length = 100
+target-version = ['py310']
