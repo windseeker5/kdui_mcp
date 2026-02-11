@@ -27,6 +27,8 @@ def add_component(component_type, config=None):
         "breadcrumb": _generate_breadcrumb,
         "tabs": _generate_tabs,
         "progress": _generate_progress,
+        "skeleton": _generate_skeleton,
+        "typography": _generate_typography,
         "chart_container": _generate_chart_container,
         # Landing page components
         "hero": _generate_hero,
@@ -84,14 +86,34 @@ def _generate_alert(config):
 
 
 def _generate_badge(config):
-    """Generate a badge component."""
+    """Generate a Shadcn-style badge component.
+    
+    Variants:
+    - default: Blue/primary color
+    - secondary: Gray/muted
+    - destructive: Red/error
+    - outline: Border only
+    - success: Green
+    - warning: Yellow/amber
+    """
     text = config.get("text", "Badge")
-    color = config.get("color", "primary")
-    size = config.get("size", "md")  # sm, md, lg
+    variant = config.get("variant", "default")  # default, secondary, destructive, outline, success, warning
     
-    size_class = f"badge-{size}" if size != "md" else ""
+    # Shadcn-inspired badge styling
+    base_classes = "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors"
     
-    return f'<span class="badge badge-{color} {size_class}">{text}</span>'
+    variant_classes = {
+        "default": "bg-blue-600 text-white hover:bg-blue-700",
+        "secondary": "bg-gray-100 text-gray-900 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-100",
+        "destructive": "bg-red-600 text-white hover:bg-red-700",
+        "outline": "border border-gray-300 text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800",
+        "success": "bg-green-600 text-white hover:bg-green-700",
+        "warning": "bg-amber-500 text-white hover:bg-amber-600"
+    }
+    
+    variant_class = variant_classes.get(variant, variant_classes["default"])
+    
+    return f'<span class="{base_classes} {variant_class}">{text}</span>'
 
 
 def _generate_button(config):
@@ -259,12 +281,143 @@ def _generate_tabs(config):
 
 
 def _generate_progress(config):
-    """Generate progress bar component."""
+    """Generate a Shadcn-style progress bar component.
+    
+    Features:
+    - Horizontal progress bar
+    - Configurable value (0-100%)
+    - Smooth animations
+    - Theme-aware colors
+    """
     value = config.get("value", 50)
     max_value = config.get("max", 100)
-    color = config.get("color", "primary")
+    variant = config.get("variant", "default")  # default, success, warning, destructive
+    show_label = config.get("show_label", False)
     
-    return f'<progress class="progress progress-{color} w-full" value="{value}" max="{max_value}"></progress>'
+    # Calculate percentage
+    percentage = (value / max_value) * 100
+    
+    # Shadcn-inspired progress bar styling
+    container_classes = "relative h-2 w-full overflow-hidden rounded-full bg-gray-200 dark:bg-gray-800"
+    
+    variant_classes = {
+        "default": "bg-blue-600",
+        "success": "bg-green-600",
+        "warning": "bg-amber-500",
+        "destructive": "bg-red-600"
+    }
+    
+    bar_class = variant_classes.get(variant, variant_classes["default"])
+    
+    progress_html = f'''<div class="{container_classes}">
+  <div class="h-full {bar_class} transition-all duration-300 ease-in-out" style="width: {percentage}%"></div>
+</div>'''
+    
+    # Add label if requested
+    if show_label:
+        progress_html = f'''<div class="space-y-2">
+  <div class="flex items-center justify-between text-sm">
+    <span class="text-gray-700 dark:text-gray-300">Progress</span>
+    <span class="text-gray-700 dark:text-gray-300 font-medium">{int(percentage)}%</span>
+  </div>
+  {progress_html}
+</div>'''
+    
+    return progress_html
+
+
+def _generate_skeleton(config):
+    """Generate a Shadcn-style skeleton loader component.
+    
+    Types:
+    - text: Text line placeholder
+    - circle: Avatar/circular placeholder
+    - rectangle: Card/rectangular placeholder
+    """
+    skeleton_type = config.get("type", "text")  # text, circle, rectangle
+    width = config.get("width", "100%")
+    height = config.get("height", "auto")
+    count = config.get("count", 1)  # Number of skeleton elements
+    
+    # Base skeleton classes with shimmer animation
+    base_classes = "animate-pulse bg-gray-200 dark:bg-gray-700"
+    
+    skeletons_html = ""
+    
+    if skeleton_type == "text":
+        # Text line skeletons
+        for i in range(count):
+            # Vary width for more natural look
+            if count > 1 and i == count - 1:
+                # Last line is shorter
+                line_width = "80%" if width == "100%" else width
+            else:
+                line_width = width
+            
+            skeletons_html += f'<div class="{base_classes} h-4 rounded" style="width: {line_width};"></div>\n'
+            if i < count - 1:
+                skeletons_html += '<div class="h-2"></div>\n'  # Spacing between lines
+        
+        return f'<div class="space-y-2">\n{skeletons_html}</div>'
+    
+    elif skeleton_type == "circle":
+        # Circular skeleton (for avatars)
+        size = config.get("size", "48px")  # Default avatar size
+        return f'<div class="{base_classes} rounded-full" style="width: {size}; height: {size};"></div>'
+    
+    elif skeleton_type == "rectangle":
+        # Rectangular skeleton (for cards, images)
+        rect_height = height if height != "auto" else "200px"
+        return f'<div class="{base_classes} rounded-lg" style="width: {width}; height: {rect_height};"></div>'
+    
+    else:
+        # Default to text
+        return f'<div class="{base_classes} h-4 rounded" style="width: {width};"></div>'
+
+
+def _generate_typography(config):
+    """Generate Shadcn-style typography elements.
+    
+    Types:
+    - h1, h2, h3, h4: Headings
+    - p: Paragraph
+    - lead: Large intro text
+    - large: Larger text
+    - small: Smaller text
+    - muted: Muted/subtle text
+    - blockquote: Quote block
+    - code: Inline code
+    - list: Unordered or ordered list
+    """
+    typo_type = config.get("type", "p")
+    text = config.get("text", "")
+    items = config.get("items", [])  # For lists
+    
+    # Shadcn typography styles
+    typography_styles = {
+        "h1": f'<h1 class="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">{text}</h1>',
+        "h2": f'<h2 class="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">{text}</h2>',
+        "h3": f'<h3 class="scroll-m-20 text-2xl font-semibold tracking-tight">{text}</h3>',
+        "h4": f'<h4 class="scroll-m-20 text-xl font-semibold tracking-tight">{text}</h4>',
+        "p": f'<p class="leading-7 [&:not(:first-child)]:mt-6">{text}</p>',
+        "lead": f'<p class="text-xl text-gray-700 dark:text-gray-300">{text}</p>',
+        "large": f'<div class="text-lg font-semibold">{text}</div>',
+        "small": f'<small class="text-sm font-medium leading-none">{text}</small>',
+        "muted": f'<p class="text-sm text-gray-500 dark:text-gray-400">{text}</p>',
+        "blockquote": f'<blockquote class="mt-6 border-l-2 border-gray-300 pl-6 italic text-gray-700 dark:text-gray-300">{text}</blockquote>',
+        "code": f'<code class="relative rounded bg-gray-100 dark:bg-gray-800 px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">{text}</code>',
+    }
+    
+    # Handle lists separately
+    if typo_type == "list":
+        list_type = config.get("list_type", "ul")  # ul or ol
+        list_html = f'<{list_type} class="my-6 ml-6 list-disc [&>li]:mt-2">\n'
+        for item in items:
+            list_html += f'  <li>{item}</li>\n'
+        list_html += f'</{list_type}>'
+        return list_html
+    
+    return typography_styles.get(typo_type, f'<p>{text}</p>')
 
 
 def _generate_chart_container(config):

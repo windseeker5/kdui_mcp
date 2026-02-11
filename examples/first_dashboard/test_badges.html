@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shadcn Badge Test</title>
+    
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS + DaisyUI -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-base-100 p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold mb-8">Shadcn-Style Badge Component Test</h1>
+        
+        <!-- Badge Variants -->
+        <div class="space-y-6">
+            <div>
+                <h2 class="text-xl font-semibold mb-4">Badge Variants</h2>
+                <div class="flex flex-wrap gap-3">
+                    <!-- Default -->
+                    <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-blue-600 text-white hover:bg-blue-700">Default</span>
+                    
+                    <!-- Secondary -->
+                    <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-gray-100 text-gray-900 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-100">Secondary</span>
+                    
+                    <!-- Destructive -->
+                    <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-red-600 text-white hover:bg-red-700">Destructive</span>
+                    
+                    <!-- Outline -->
+                    <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors border border-gray-300 text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800">Outline</span>
+                    
+                    <!-- Success -->
+                    <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-green-600 text-white hover:bg-green-700">Success</span>
+                    
+                    <!-- Warning -->
+                    <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-amber-500 text-white hover:bg-amber-600">Warning</span>
+                </div>
+            </div>
+            
+            <!-- Usage Examples -->
+            <div>
+                <h2 class="text-xl font-semibold mb-4">Real-World Usage</h2>
+                <div class="space-y-4">
+                    <!-- In a table row -->
+                    <div class="border border-base-300 rounded-lg p-4">
+                        <div class="flex items-center justify-between">
+                            <span class="font-medium">Order #12345</span>
+                            <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-green-600 text-white hover:bg-green-700">Completed</span>
+                        </div>
+                    </div>
+                    
+                    <div class="border border-base-300 rounded-lg p-4">
+                        <div class="flex items-center justify-between">
+                            <span class="font-medium">Order #12346</span>
+                            <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-amber-500 text-white hover:bg-amber-600">Processing</span>
+                        </div>
+                    </div>
+                    
+                    <div class="border border-base-300 rounded-lg p-4">
+                        <div class="flex items-center justify-between">
+                            <span class="font-medium">Order #12347</span>
+                            <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-red-600 text-white hover:bg-red-700">Failed</span>
+                        </div>
+                    </div>
+                    
+                    <!-- With multiple badges -->
+                    <div class="border border-base-300 rounded-lg p-4">
+                        <div class="flex items-center gap-2">
+                            <span class="font-medium">Product Features:</span>
+                            <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-blue-600 text-white hover:bg-blue-700">New</span>
+                            <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors bg-green-600 text-white hover:bg-green-700">Premium</span>
+                            <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors border border-gray-300 text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800">Beta</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Dark Mode Test -->
+            <div>
+                <h2 class="text-xl font-semibold mb-4">Theme Toggle Test</h2>
+                <p class="text-sm text-base-content opacity-70 mb-3">Toggle between light and dark mode to see badges adapt:</p>
+                <button id="theme-toggle" class="btn btn-sm btn-outline gap-2">
+                    <span id="theme-label">Switch to Dark Mode</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Theme toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeLabel = document.getElementById('theme-label');
+        const html = document.documentElement;
+        
+        themeToggle.addEventListener('click', function() {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            html.setAttribute('data-theme', newTheme);
+            themeLabel.textContent = newTheme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode';
+        });
+    </script>
+</body>
+</html>
