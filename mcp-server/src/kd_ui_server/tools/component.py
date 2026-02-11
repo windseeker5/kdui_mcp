@@ -29,6 +29,7 @@ def add_component(component_type, config=None):
         "progress": _generate_progress,
         "skeleton": _generate_skeleton,
         "typography": _generate_typography,
+        "dropdown_menu": _generate_dropdown_menu,
         "chart_container": _generate_chart_container,
         # Landing page components
         "hero": _generate_hero,
@@ -418,6 +419,179 @@ def _generate_typography(config):
         return list_html
     
     return typography_styles.get(typo_type, f'<p>{text}</p>')
+
+
+def _generate_dropdown_menu(config):
+    """Generate a Shadcn-style dropdown menu component.
+    
+    Features:
+    - User profile menus
+    - Action dropdowns
+    - Context menus
+    - Theme-aware styling
+    - Smooth animations
+    """
+    trigger_text = config.get("trigger_text", "Open Menu")
+    trigger_icon = config.get("trigger_icon", "chevron-down")
+    trigger_variant = config.get("trigger_variant", "outline")  # outline, ghost, default
+    items = config.get("items", [
+        {"type": "label", "text": "My Account"},
+        {"type": "item", "icon": "user", "text": "Profile", "shortcut": "⇧⌘P"},
+        {"type": "item", "icon": "settings", "text": "Settings", "shortcut": "⌘S"},
+        {"type": "separator"},
+        {"type": "item", "icon": "log-out", "text": "Log out", "variant": "destructive"}
+    ])
+    align = config.get("align", "end")  # start, center, end
+    
+    # Generate unique ID for this dropdown
+    import random
+    dropdown_id = f"dropdown-{random.randint(1000, 9999)}"
+    
+    # Button variant styles
+    button_variants = {
+        "outline": "inline-flex items-center justify-center gap-2 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700",
+        "ghost": "inline-flex items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:text-gray-200 dark:hover:bg-gray-800",
+        "default": "inline-flex items-center justify-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+    }
+    
+    button_class = button_variants.get(trigger_variant, button_variants["outline"])
+    
+    # Alignment classes
+    align_classes = {
+        "start": "left-0",
+        "center": "left-1/2 -translate-x-1/2",
+        "end": "right-0"
+    }
+    align_class = align_classes.get(align, align_classes["end"])
+    
+    # Build menu items
+    menu_items_html = ""
+    for item in items:
+        item_type = item.get("type", "item")
+        
+        if item_type == "label":
+            # Menu label (non-interactive)
+            text = item.get("text", "Label")
+            menu_items_html += f'''
+            <div class="px-2 py-1.5 text-xs font-semibold text-gray-500 dark:text-gray-400">
+              {text}
+            </div>'''
+        
+        elif item_type == "separator":
+            # Separator
+            menu_items_html += '''
+            <div class="my-1 h-px bg-gray-200 dark:bg-gray-700"></div>'''
+        
+        elif item_type == "item":
+            # Menu item
+            icon = item.get("icon", "")
+            text = item.get("text", "Item")
+            shortcut = item.get("shortcut", "")
+            variant = item.get("variant", "default")
+            disabled = item.get("disabled", False)
+            
+            # Item styling based on variant
+            if variant == "destructive":
+                item_class = "text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950"
+            else:
+                item_class = "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
+            
+            if disabled:
+                item_class = "text-gray-400 dark:text-gray-600 cursor-not-allowed opacity-50"
+            
+            icon_html = f'<i data-lucide="{icon}" class="w-4 h-4"></i>' if icon else ""
+            shortcut_html = f'<span class="ml-auto text-xs text-gray-400">{shortcut}</span>' if shortcut else ""
+            
+            menu_items_html += f'''
+            <button class="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm {item_class} transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500" {"disabled" if disabled else ""}>
+              {icon_html}
+              <span>{text}</span>
+              {shortcut_html}
+            </button>'''
+    
+    return f'''
+<!-- Dropdown Menu -->
+<div class="relative inline-block text-left">
+  <!-- Trigger Button -->
+  <button id="{dropdown_id}-trigger" class="{button_class}" aria-expanded="false" aria-haspopup="true">
+    <span>{trigger_text}</span>
+    <i data-lucide="{trigger_icon}" class="w-4 h-4"></i>
+  </button>
+  
+  <!-- Dropdown Menu -->
+  <div id="{dropdown_id}-menu" class="absolute {align_class} z-50 mt-2 w-56 origin-top-right rounded-md border border-gray-200 bg-white p-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:border-gray-700 dark:bg-gray-900 hidden opacity-0 scale-95 transition-all duration-100" role="menu" aria-orientation="vertical">
+    {menu_items_html}
+  </div>
+</div>
+
+<script>
+(function() {{
+  const trigger = document.getElementById('{dropdown_id}-trigger');
+  const menu = document.getElementById('{dropdown_id}-menu');
+  
+  if (trigger && menu) {{
+    // Toggle dropdown
+    trigger.addEventListener('click', function(e) {{
+      e.stopPropagation();
+      const isHidden = menu.classList.contains('hidden');
+      
+      // Close all other dropdowns
+      document.querySelectorAll('[id$="-menu"]').forEach(m => {{
+        m.classList.add('hidden', 'opacity-0', 'scale-95');
+        m.classList.remove('opacity-100', 'scale-100');
+      }});
+      
+      if (isHidden) {{
+        // Open this dropdown
+        menu.classList.remove('hidden');
+        setTimeout(() => {{
+          menu.classList.remove('opacity-0', 'scale-95');
+          menu.classList.add('opacity-100', 'scale-100');
+        }}, 10);
+        trigger.setAttribute('aria-expanded', 'true');
+      }} else {{
+        // Close this dropdown
+        menu.classList.add('opacity-0', 'scale-95');
+        menu.classList.remove('opacity-100', 'scale-100');
+        setTimeout(() => {{
+          menu.classList.add('hidden');
+        }}, 100);
+        trigger.setAttribute('aria-expanded', 'false');
+      }}
+    }});
+    
+    // Close on click outside
+    document.addEventListener('click', function(e) {{
+      if (!trigger.contains(e.target) && !menu.contains(e.target)) {{
+        menu.classList.add('opacity-0', 'scale-95');
+        menu.classList.remove('opacity-100', 'scale-100');
+        setTimeout(() => {{
+          menu.classList.add('hidden');
+        }}, 100);
+        trigger.setAttribute('aria-expanded', 'false');
+      }}
+    }});
+    
+    // Close on Escape key
+    document.addEventListener('keydown', function(e) {{
+      if (e.key === 'Escape' && !menu.classList.contains('hidden')) {{
+        menu.classList.add('opacity-0', 'scale-95');
+        menu.classList.remove('opacity-100', 'scale-100');
+        setTimeout(() => {{
+          menu.classList.add('hidden');
+        }}, 100);
+        trigger.setAttribute('aria-expanded', 'false');
+      }}
+    }});
+    
+    // Initialize Lucide icons
+    if (typeof lucide !== 'undefined') {{
+      lucide.createIcons();
+    }}
+  }}
+}})();
+</script>
+'''
 
 
 def _generate_chart_container(config):
