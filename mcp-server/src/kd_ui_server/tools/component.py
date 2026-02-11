@@ -35,6 +35,8 @@ def add_component(component_type, config=None):
         "pricing": _generate_pricing,
         "cta": _generate_cta,
         "footer": _generate_footer,
+        # Theme toggle
+        "theme_toggle": _generate_theme_toggle,
     }
     
     if component_type in components:
@@ -156,6 +158,7 @@ def _generate_navbar(config):
     """Generate a navbar component."""
     brand = config.get("brand", "Brand")
     items = config.get("items", ["Home", "About", "Contact"])
+    theme_toggle = config.get("theme_toggle", True)  # Include theme toggle by default
     
     nav_html = '''
 <div class="navbar bg-base-200 shadow-md">
@@ -170,7 +173,17 @@ def _generate_navbar(config):
         nav_html += f'      <li><a>{item}</a></li>\n'
     
     nav_html += '''    </ul>
-  </div>
+'''
+    
+    # Add theme toggle if enabled
+    if theme_toggle:
+        nav_html += '''    <button id="theme-toggle" class="btn btn-ghost btn-circle ml-2" aria-label="Toggle theme">
+      <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
+      <i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i>
+    </button>
+'''
+    
+    nav_html += '''  </div>
 </div>
 '''
     return nav_html
@@ -294,4 +307,434 @@ def _generate_chart_container(config):
     }}
   }});
 </script>
+'''
+
+
+def _generate_hero(config):
+    """Generate a hero section with Shadcn styling."""
+    title = config.get("title", "Build Amazing Products")
+    subtitle = config.get("subtitle", "The fastest way to create beautiful, responsive web applications")
+    cta_primary = config.get("cta_primary", "Get Started")
+    cta_secondary = config.get("cta_secondary", "Learn More")
+    
+    return f'''
+<!-- Hero Section -->
+<section class="bg-gradient-to-br from-blue-50 to-white py-20 px-4">
+  <div class="max-w-6xl mx-auto text-center">
+    <h1 class="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+      {title}
+    </h1>
+    <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+      {subtitle}
+    </p>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+      <button class="btn btn-primary btn-lg gap-2">
+        <i data-lucide="rocket" class="w-5 h-5"></i>
+        {cta_primary}
+      </button>
+      <button class="btn btn-outline btn-lg gap-2">
+        <i data-lucide="book-open" class="w-5 h-5"></i>
+        {cta_secondary}
+      </button>
+    </div>
+  </div>
+</section>
+'''
+
+
+def _generate_features(config):
+    """Generate a features section with Shadcn styling."""
+    features = config.get("features", [
+        {
+            "icon": "zap",
+            "title": "Lightning Fast",
+            "description": "Optimized for speed and performance"
+        },
+        {
+            "icon": "shield",
+            "title": "Secure by Default",
+            "description": "Built with security best practices"
+        },
+        {
+            "icon": "code",
+            "title": "Developer Friendly",
+            "description": "Clean APIs and great documentation"
+        }
+    ])
+    
+    features_html = '''
+<!-- Features Section -->
+<section class="py-20 px-4 bg-white">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl font-bold text-gray-900 mb-4">Features</h2>
+      <p class="text-xl text-gray-600">Everything you need to build amazing products</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+'''
+    
+    for feature in features:
+        icon = feature.get("icon", "check")
+        title = feature.get("title", "Feature")
+        description = feature.get("description", "Description")
+        
+        features_html += f'''
+      <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow duration-200">
+        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+          <i data-lucide="{icon}" class="w-6 h-6 text-blue-600"></i>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-900 mb-2">{title}</h3>
+        <p class="text-gray-600">{description}</p>
+      </div>
+'''
+    
+    features_html += '''
+    </div>
+  </div>
+</section>
+'''
+    return features_html
+
+
+def _generate_testimonials(config):
+    """Generate a testimonials section with Shadcn styling."""
+    testimonials = config.get("testimonials", [
+        {
+            "name": "Sarah Johnson",
+            "role": "CEO",
+            "company": "TechCorp",
+            "quote": "This product has transformed how we work. Highly recommended!",
+            "avatar": "SJ"
+        },
+        {
+            "name": "Mike Chen",
+            "role": "CTO",
+            "company": "StartupXYZ",
+            "quote": "The best investment we've made this year. Amazing results!",
+            "avatar": "MC"
+        },
+        {
+            "name": "Emily Davis",
+            "role": "Product Manager",
+            "company": "Innovation Labs",
+            "quote": "Intuitive, powerful, and reliable. Everything we needed.",
+            "avatar": "ED"
+        }
+    ])
+    
+    testimonials_html = '''
+<!-- Testimonials Section -->
+<section class="py-20 px-4 bg-gray-50">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl font-bold text-gray-900 mb-4">What Our Customers Say</h2>
+      <p class="text-xl text-gray-600">Trusted by teams worldwide</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+'''
+    
+    for testimonial in testimonials:
+        name = testimonial.get("name", "Customer Name")
+        role = testimonial.get("role", "Role")
+        company = testimonial.get("company", "Company")
+        quote = testimonial.get("quote", "Great product!")
+        avatar = testimonial.get("avatar", "XX")
+        
+        testimonials_html += f'''
+      <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+        <div class="flex items-center gap-1 mb-4">
+          <i data-lucide="star" class="w-4 h-4 fill-yellow-400 text-yellow-400"></i>
+          <i data-lucide="star" class="w-4 h-4 fill-yellow-400 text-yellow-400"></i>
+          <i data-lucide="star" class="w-4 h-4 fill-yellow-400 text-yellow-400"></i>
+          <i data-lucide="star" class="w-4 h-4 fill-yellow-400 text-yellow-400"></i>
+          <i data-lucide="star" class="w-4 h-4 fill-yellow-400 text-yellow-400"></i>
+        </div>
+        <p class="text-gray-700 mb-6 italic">"{quote}"</p>
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-semibold">
+            {avatar}
+          </div>
+          <div>
+            <p class="font-semibold text-gray-900">{name}</p>
+            <p class="text-sm text-gray-600">{role} at {company}</p>
+          </div>
+        </div>
+      </div>
+'''
+    
+    testimonials_html += '''
+    </div>
+  </div>
+</section>
+'''
+    return testimonials_html
+
+
+def _generate_pricing(config):
+    """Generate a pricing section with Shadcn styling."""
+    plans = config.get("plans", [
+        {
+            "name": "Basic",
+            "price": "$9",
+            "period": "per month",
+            "features": ["10 Projects", "5GB Storage", "Basic Support"],
+            "popular": False
+        },
+        {
+            "name": "Pro",
+            "price": "$29",
+            "period": "per month",
+            "features": ["Unlimited Projects", "50GB Storage", "Priority Support", "Advanced Analytics"],
+            "popular": True
+        },
+        {
+            "name": "Enterprise",
+            "price": "$99",
+            "period": "per month",
+            "features": ["Unlimited Everything", "Custom Integration", "24/7 Support", "SLA Guarantee"],
+            "popular": False
+        }
+    ])
+    
+    pricing_html = '''
+<!-- Pricing Section -->
+<section class="py-20 px-4 bg-white">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl font-bold text-gray-900 mb-4">Simple, Transparent Pricing</h2>
+      <p class="text-xl text-gray-600">Choose the plan that's right for you</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+'''
+    
+    for plan in plans:
+        name = plan.get("name", "Plan")
+        price = plan.get("price", "$0")
+        period = plan.get("period", "per month")
+        features = plan.get("features", [])
+        popular = plan.get("popular", False)
+        
+        border_class = "border-blue-600 shadow-lg" if popular else "border-gray-200"
+        badge = '''
+        <div class="absolute -top-4 left-1/2 -translate-x-1/2">
+          <span class="bg-blue-600 text-white px-4 py-1 rounded-full text-sm font-semibold">Popular</span>
+        </div>
+''' if popular else ""
+        
+        pricing_html += f'''
+      <div class="relative bg-white border-2 {border_class} rounded-lg p-8 hover:shadow-xl transition-shadow duration-200">
+        {badge}
+        <h3 class="text-2xl font-bold text-gray-900 mb-2">{name}</h3>
+        <div class="mb-6">
+          <span class="text-4xl font-bold text-gray-900">{price}</span>
+          <span class="text-gray-600">/{period}</span>
+        </div>
+        <ul class="space-y-3 mb-8">
+'''
+        
+        for feature in features:
+            pricing_html += f'''
+          <li class="flex items-center gap-2 text-gray-700">
+            <i data-lucide="check" class="w-5 h-5 text-green-600"></i>
+            <span>{feature}</span>
+          </li>
+'''
+        
+        btn_class = "btn-primary" if popular else "btn-outline"
+        pricing_html += f'''
+        </ul>
+        <button class="btn {btn_class} w-full">Get Started</button>
+      </div>
+'''
+    
+    pricing_html += '''
+    </div>
+  </div>
+</section>
+'''
+    return pricing_html
+
+
+def _generate_cta(config):
+    """Generate a call-to-action section with Shadcn styling."""
+    title = config.get("title", "Ready to Get Started?")
+    subtitle = config.get("subtitle", "Join thousands of satisfied customers today")
+    button_text = config.get("button_text", "Start Free Trial")
+    
+    return f'''
+<!-- CTA Section -->
+<section class="py-20 px-4 bg-gradient-to-r from-blue-600 to-blue-700">
+  <div class="max-w-4xl mx-auto text-center">
+    <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">
+      {title}
+    </h2>
+    <p class="text-xl text-blue-100 mb-8">
+      {subtitle}
+    </p>
+    <button class="btn btn-lg bg-white text-blue-600 hover:bg-gray-100 border-0 gap-2">
+      <i data-lucide="arrow-right" class="w-5 h-5"></i>
+      {button_text}
+    </button>
+  </div>
+</section>
+'''
+
+
+def _generate_footer(config):
+    """Generate a footer section with Shadcn styling."""
+    company_name = config.get("company_name", "Your Company")
+    description = config.get("description", "Building amazing products since 2024")
+    
+    return f'''
+<!-- Footer -->
+<footer class="bg-gray-900 text-gray-300 py-12 px-4">
+  <div class="max-w-6xl mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+      <!-- Company Info -->
+      <div class="col-span-1 md:col-span-2">
+        <h3 class="text-2xl font-bold text-white mb-3">{company_name}</h3>
+        <p class="text-gray-400 mb-4">{description}</p>
+        <div class="flex gap-4">
+          <a href="#" class="hover:text-white transition-colors">
+            <i data-lucide="twitter" class="w-5 h-5"></i>
+          </a>
+          <a href="#" class="hover:text-white transition-colors">
+            <i data-lucide="github" class="w-5 h-5"></i>
+          </a>
+          <a href="#" class="hover:text-white transition-colors">
+            <i data-lucide="linkedin" class="w-5 h-5"></i>
+          </a>
+        </div>
+      </div>
+      
+      <!-- Product Links -->
+      <div>
+        <h4 class="text-white font-semibold mb-3">Product</h4>
+        <ul class="space-y-2">
+          <li><a href="#" class="hover:text-white transition-colors">Features</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Pricing</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Documentation</a></li>
+        </ul>
+      </div>
+      
+      <!-- Company Links -->
+      <div>
+        <h4 class="text-white font-semibold mb-3">Company</h4>
+        <ul class="space-y-2">
+          <li><a href="#" class="hover:text-white transition-colors">About</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Blog</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    
+    <!-- Copyright -->
+    <div class="border-t border-gray-800 pt-8 text-center text-gray-400">
+      <p>&copy; 2024 {company_name}. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Initialize Lucide icons
+  if (typeof lucide !== 'undefined') {{
+    lucide.createIcons();
+  }}
+</script>
+'''
+
+
+def _generate_theme_toggle(config):
+    """Generate a theme toggle button with Shadcn styling."""
+    position = config.get("position", "navbar")  # navbar, standalone, floating
+    
+    if position == "standalone":
+        # Standalone toggle button
+        return '''
+<!-- Theme Toggle Button -->
+<button id="theme-toggle" class="btn btn-ghost btn-circle" aria-label="Toggle theme">
+  <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
+  <i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i>
+</button>
+
+<script>
+  // Theme toggle functionality
+  (function() {
+    const themeToggle = document.getElementById('theme-toggle');
+    const html = document.documentElement;
+    
+    // Check for saved theme preference or default to light
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    html.setAttribute('data-theme', savedTheme);
+    
+    // Toggle theme on click
+    themeToggle.addEventListener('click', function() {
+      const currentTheme = html.getAttribute('data-theme');
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      
+      html.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      
+      // Reinitialize Lucide icons to update the icon
+      if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+      }
+    });
+    
+    // Initialize icons
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
+    }
+  })();
+</script>
+'''
+    elif position == "floating":
+        # Floating toggle button (bottom-right)
+        return '''
+<!-- Floating Theme Toggle -->
+<div class="fixed bottom-6 right-6 z-50">
+  <button id="theme-toggle" class="btn btn-circle btn-primary shadow-lg" aria-label="Toggle theme">
+    <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
+    <i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i>
+  </button>
+</div>
+
+<script>
+  // Theme toggle functionality
+  (function() {
+    const themeToggle = document.getElementById('theme-toggle');
+    const html = document.documentElement;
+    
+    // Check for saved theme preference or default to light
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    html.setAttribute('data-theme', savedTheme);
+    
+    // Toggle theme on click
+    themeToggle.addEventListener('click', function() {
+      const currentTheme = html.getAttribute('data-theme');
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      
+      html.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      
+      // Reinitialize Lucide icons to update the icon
+      if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+      }
+    });
+    
+    // Initialize icons
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
+    }
+  })();
+</script>
+'''
+    else:
+        # Default: navbar position (inline, no script - script should be in head)
+        return '''
+<button id="theme-toggle" class="btn btn-ghost btn-circle" aria-label="Toggle theme">
+  <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
+  <i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i>
+</button>
 '''

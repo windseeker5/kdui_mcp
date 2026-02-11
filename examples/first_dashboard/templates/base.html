@@ -25,22 +25,57 @@
     </style>
     
     <script>
-        // DaisyUI theme configuration
-        tailwind.config = {
-            daisyui: {
-                themes: [{
-                    light: {
-                        "primary": "#2563eb",      // Blue-600
-                        "secondary": "#64748b",    // Slate-500
-                        "accent": "#8b5cf6",       // Purple-500
-                        "neutral": "#1f2937",      // Gray-800
-                        "base-100": "#ffffff",     // White
-                        "base-200": "#f9fafb",     // Gray-50
-                        "base-300": "#f3f4f6",     // Gray-100
+        // Theme toggle functionality
+        (function() {
+            const html = document.documentElement;
+            
+            // Check for saved theme preference or default to light
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            html.setAttribute('data-theme', savedTheme);
+            
+            // Function to update theme icon
+            function updateThemeIcon(theme) {
+                const themeIcon = document.getElementById('theme-icon');
+                if (themeIcon) {
+                    // Light mode shows moon (click to go dark)
+                    // Dark mode shows sun (click to go light)
+                    const iconName = theme === 'light' ? 'moon' : 'sun';
+                    themeIcon.setAttribute('data-lucide', iconName);
+                    
+                    // Reinitialize Lucide icons to update the icon
+                    if (typeof lucide !== 'undefined') {
+                        lucide.createIcons();
                     }
-                }]
+                }
             }
-        };
+            
+            // Wait for DOM to be ready
+            document.addEventListener('DOMContentLoaded', function() {
+                const themeToggle = document.getElementById('theme-toggle');
+                
+                // Set initial icon based on saved theme
+                updateThemeIcon(savedTheme);
+                
+                if (themeToggle) {
+                    // Toggle theme on click
+                    themeToggle.addEventListener('click', function() {
+                        const currentTheme = html.getAttribute('data-theme');
+                        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                        
+                        html.setAttribute('data-theme', newTheme);
+                        localStorage.setItem('theme', newTheme);
+                        
+                        // Update the icon
+                        updateThemeIcon(newTheme);
+                    });
+                }
+                
+                // Initialize Lucide icons
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+            });
+        })();
     </script>
 </head>
 <body class="bg-base-200">

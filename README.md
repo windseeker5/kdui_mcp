@@ -28,26 +28,43 @@ With KD UI Framework, you get:
    - Data tables
    - Fully responsive
 
-2. **`create_form`** - Generate beautiful forms
+2. **`create_landing_page`** - Generate complete landing pages
+   - Hero section with CTA buttons
+   - Features section (6-column grid)
+   - Testimonials with star ratings
+   - Pricing cards with "Popular" badge
+   - Call-to-action section
+   - Professional footer
+   - Fully responsive
+
+3. **`create_form`** - Generate beautiful forms
    - Predefined forms (login, register, contact)
    - Custom form builder
    - Validation support
    - Error handling
 
-3. **`create_table`** - Generate data tables
+4. **`create_table`** - Generate data tables
    - Sortable columns
    - Search/filter
    - Pagination
    - Row actions
    - Responsive (cards on mobile)
 
-4. **`add_component`** - Add individual components
+5. **`add_component`** - Add individual components
    - Stat cards
    - Alerts
    - Badges, buttons, cards
    - Modals, navbars, sidebars
    - Breadcrumbs, tabs, progress bars
    - Chart containers
+   - **Theme toggle** - Dark/Light mode switcher 🌙
+   - **Landing page components:**
+     - Hero sections
+     - Features grids
+     - Testimonials
+     - Pricing cards
+     - CTA banners
+     - Footers
 
 ### Design System
 
@@ -192,6 +209,119 @@ The tool automatically creates a **Shadcn-quality** Flask template with:
 ![Sales Dashboard](examples/first_dashboard/screenshot.png)
 
 No hand-coding needed - the MCP tool generates everything! 🎉
+
+---
+
+## 🌐 Your First Landing Page
+
+Want to create a beautiful landing page? It's just as easy!
+
+### Quick Demo
+
+1. **Navigate to the landing page example:**
+   ```bash
+   cd examples/landing_page
+   python app.py
+   ```
+
+2. **Open your browser:**
+   Visit **http://localhost:5002** to see a complete landing page with:
+   - 🚀 Hero section with gradient background
+   - ⚡ Features grid with Lucide icons
+   - 💬 Testimonials with 5-star ratings
+   - 💰 Pricing cards with "Popular" badge
+   - 📣 Call-to-action banner
+   - 🔗 Professional footer with social links
+
+### Create Your Own Landing Page (Hello World!)
+
+**The Simple Prompt - Copy & Paste This:**
+
+```
+Using the create_landing_page MCP tool, generate a landing page for my product
+```
+
+**Or ask naturally:**
+
+```
+Create a landing page with hero section, features, testimonials, pricing, and footer
+```
+
+**What the MCP tool generates:**
+
+The tool automatically creates a **complete Shadcn-quality** landing page with:
+
+✅ **Hero Section** - Large headline, subtitle, CTA buttons with Lucide icons
+✅ **Features Grid** - 6 features in responsive 3-column layout with icon badges
+✅ **Testimonials** - Customer quotes with avatars and 5-star ratings
+✅ **Pricing Cards** - 3 tiers with highlighted "Popular" option
+✅ **CTA Banner** - Gradient background with compelling call-to-action
+✅ **Footer** - Multi-column layout with social media links
+✅ **Fully Responsive** - Looks perfect on mobile, tablet, and desktop
+
+**The Result: Production-Ready Landing Page in Seconds!**
+
+No design skills needed - the MCP tool handles everything! 🎉
+
+---
+
+## 🌙 Dark Mode Support
+
+**NEW!** All dashboards and components now support dark/light mode toggle!
+
+### Features
+
+- 🌓 **Automatic Theme Toggle** - Moon/Sun icon button in navbar
+- 💾 **Persistent Preference** - Saves your choice in localStorage
+- 🎨 **DaisyUI Themes** - Uses built-in light and dark themes
+- ⚡ **Smooth Transitions** - Icons change instantly
+- 🔄 **Works Everywhere** - All components adapt automatically
+
+### How It Works
+
+The theme toggle is **automatically included** in:
+- ✅ Dashboard navbars
+- ✅ Landing page navbars
+- ✅ Any component with `navbar` 
+
+**No extra code needed!** Just generate your dashboard and the toggle is there.
+
+### Usage
+
+**For users:**
+- Click the moon icon (🌙) to switch to dark mode
+- Click the sun icon (☀️) to switch to light mode
+- Your preference is saved automatically
+
+**For developers:**
+You can also add standalone theme toggles:
+
+```python
+from kd_ui_server.tools.component import add_component
+
+# Standalone toggle button
+toggle = add_component("theme_toggle", {"position": "standalone"})
+
+# Floating toggle (bottom-right)
+floating_toggle = add_component("theme_toggle", {"position": "floating"})
+
+# In navbar (default, automatic)
+navbar = add_component("navbar", {
+    "brand": "My App",
+    "theme_toggle": True  # Default: True
+})
+```
+
+### Customization
+
+Disable theme toggle in navbar:
+
+```python
+navbar = add_component("navbar", {
+    "brand": "My App",
+    "theme_toggle": False  # Disable theme toggle
+})
+```
 
 ---
 
