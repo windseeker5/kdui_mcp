@@ -213,22 +213,182 @@ def _generate_navbar(config):
 
 
 def _generate_sidebar(config):
-    """Generate a sidebar component."""
-    items = config.get("items", [
-        {"label": "Dashboard", "url": "/dashboard", "active": True},
-        {"label": "Analytics", "url": "/analytics"},
-        {"label": "Settings", "url": "/settings"},
-    ])
+    """Generate an enhanced Shadcn-style sidebar component.
     
-    sidebar_html = '''
-<ul class="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
+    Features:
+    - Collapsible sidebar
+    - Icons for menu items (Lucide icons)
+    - Nested menu items (submenu support)
+    - Active state highlighting
+    - Smooth animations
+    - Theme-aware styling
+    """
+    items = config.get("items", [
+        {"icon": "layout-dashboard", "label": "Dashboard", "url": "/dashboard", "active": True},
+        {"icon": "bar-chart", "label": "Analytics", "url": "/analytics"},
+        {"icon": "settings", "label": "Settings", "url": "/settings"},
+    ])
+    collapsible = config.get("collapsible", True)
+    brand = config.get("brand", "App")
+    brand_icon = config.get("brand_icon", "box")
+    
+    # Generate unique ID for this sidebar
+    import random
+    sidebar_id = f"sidebar-{random.randint(1000, 9999)}"
+    
+    # Build menu items
+    menu_items_html = ""
+    for item in items:
+        icon = item.get("icon", "circle")
+        label = item.get("label", "Menu Item")
+        url = item.get("url", "#")
+        active = item.get("active", False)
+        badge = item.get("badge", None)
+        submenu = item.get("submenu", [])
+        
+        # Active state styling
+        active_class = "bg-gray-100 dark:bg-gray-800 text-blue-600 dark:text-blue-400" if active else "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+        
+        # Badge HTML if present
+        badge_html = ""
+        if badge:
+            badge_variant = badge.get("variant", "default")
+            badge_text = badge.get("text", "")
+            badge_colors = {
+                "default": "bg-blue-600 text-white",
+                "success": "bg-green-600 text-white",
+                "warning": "bg-amber-500 text-white",
+                "destructive": "bg-red-600 text-white"
+            }
+            badge_class = badge_colors.get(badge_variant, badge_colors["default"])
+            badge_html = f'<span class="ml-auto rounded-full px-2 py-0.5 text-xs font-semibold {badge_class}">{badge_text}</span>'
+        
+        if submenu:
+            # Menu item with submenu
+            submenu_id = f"submenu-{random.randint(1000, 9999)}"
+            menu_items_html += f'''
+    <div class="mb-1">
+      <button id="{submenu_id}-trigger" class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium {active_class} transition-colors">
+        <i data-lucide="{icon}" class="w-5 h-5 flex-shrink-0"></i>
+        <span class="sidebar-label">{label}</span>
+        <i data-lucide="chevron-down" class="w-4 h-4 ml-auto sidebar-label transition-transform" id="{submenu_id}-chevron"></i>
+      </button>
+      <div id="{submenu_id}-content" class="ml-8 mt-1 space-y-1 hidden">
+'''
+            for sub_item in submenu:
+                sub_label = sub_item.get("label", "Submenu")
+                sub_url = sub_item.get("url", "#")
+                sub_active = sub_item.get("active", False)
+                sub_active_class = "text-blue-600 dark:text-blue-400 font-medium" if sub_active else "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+                
+                menu_items_html += f'''
+        <a href="{sub_url}" class="block rounded-md px-3 py-2 text-sm {sub_active_class} transition-colors">
+          {sub_label}
+        </a>
+'''
+            menu_items_html += '''
+      </div>
+    </div>
+'''
+        else:
+            # Regular menu item
+            menu_items_html += f'''
+    <a href="{url}" class="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium {active_class} transition-colors mb-1">
+      <i data-lucide="{icon}" class="w-5 h-5 flex-shrink-0"></i>
+      <span class="sidebar-label">{label}</span>
+      {badge_html}
+    </a>
 '''
     
-    for item in items:
-        active_class = "active" if item.get("active", False) else ""
-        sidebar_html += f'''  <li><a href="{item['url']}" class="{active_class}">{item['label']}</a></li>\n'''
+    # Collapse button HTML
+    collapse_button = ""
+    if collapsible:
+        collapse_button = f'''
+    <button id="{sidebar_id}-toggle" class="absolute top-4 -right-3 z-10 flex h-6 w-6 items-center justify-center rounded-full border border-gray-200 bg-white shadow-md hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 transition-colors">
+      <i data-lucide="chevron-left" class="w-4 h-4 text-gray-600 dark:text-gray-300" id="{sidebar_id}-chevron"></i>
+    </button>
+'''
     
-    sidebar_html += '</ul>\n'
+    sidebar_html = f'''
+<!-- Enhanced Sidebar -->
+<aside id="{sidebar_id}" class="relative flex h-screen w-64 flex-col border-r border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-950 transition-all duration-300 ease-in-out">
+  {collapse_button}
+  
+  <!-- Brand -->
+  <div class="flex h-16 items-center gap-3 border-b border-gray-200 px-4 dark:border-gray-800">
+    <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600">
+      <i data-lucide="{brand_icon}" class="w-6 h-6 text-white"></i>
+    </div>
+    <span class="sidebar-label text-lg font-semibold text-gray-900 dark:text-white">{brand}</span>
+  </div>
+  
+  <!-- Navigation -->
+  <nav class="flex-1 overflow-y-auto p-4">
+    {menu_items_html}
+  </nav>
+  
+  <!-- Footer (optional user section) -->
+  <div class="border-t border-gray-200 p-4 dark:border-gray-800">
+    <div class="flex items-center gap-3">
+      <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-gray-200 dark:bg-gray-800">
+        <i data-lucide="user" class="w-5 h-5 text-gray-600 dark:text-gray-400"></i>
+      </div>
+      <div class="sidebar-label flex-1 overflow-hidden">
+        <p class="text-sm font-medium text-gray-900 dark:text-white truncate">User Name</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400 truncate">user@example.com</p>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<script>
+(function() {{
+  const sidebar = document.getElementById('{sidebar_id}');
+  const toggleBtn = document.getElementById('{sidebar_id}-toggle');
+  const chevron = document.getElementById('{sidebar_id}-chevron');
+  
+  // Collapse/expand functionality
+  if (toggleBtn && sidebar && chevron) {{
+    toggleBtn.addEventListener('click', function() {{
+      sidebar.classList.toggle('w-64');
+      sidebar.classList.toggle('w-16');
+      
+      // Hide/show labels
+      const labels = sidebar.querySelectorAll('.sidebar-label');
+      labels.forEach(label => {{
+        label.classList.toggle('hidden');
+      }});
+      
+      // Rotate chevron
+      chevron.classList.toggle('rotate-180');
+    }});
+  }}
+  
+  // Submenu toggle functionality
+  document.querySelectorAll('[id$="-trigger"]').forEach(trigger => {{
+    const triggerId = trigger.id;
+    const submenuId = triggerId.replace('-trigger', '-content');
+    const chevronId = triggerId.replace('-trigger', '-chevron');
+    const submenu = document.getElementById(submenuId);
+    const chevron = document.getElementById(chevronId);
+    
+    if (trigger && submenu && chevron) {{
+      trigger.addEventListener('click', function(e) {{
+        e.preventDefault();
+        submenu.classList.toggle('hidden');
+        chevron.classList.toggle('rotate-180');
+      }});
+    }}
+  }});
+  
+  // Initialize Lucide icons
+  if (typeof lucide !== 'undefined') {{
+    lucide.createIcons();
+  }}
+}})();
+</script>
+'''
+    
     return sidebar_html
 
 
