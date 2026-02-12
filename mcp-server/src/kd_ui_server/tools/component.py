@@ -24,6 +24,7 @@ def add_component(component_type, config=None):
         "modal": _generate_modal,
         "navbar": _generate_navbar,
         "sidebar": _generate_sidebar,
+        "navigation_menu": _generate_navigation_menu,
         "breadcrumb": _generate_breadcrumb,
         "tabs": _generate_tabs,
         "progress": _generate_progress,
@@ -390,6 +391,164 @@ def _generate_sidebar(config):
 '''
     
     return sidebar_html
+
+
+def _generate_navigation_menu(config):
+    """Generate a Shadcn-style horizontal navigation menu component.
+    
+    Features:
+    - Horizontal navigation bar with dropdown menus
+    - Multi-level navigation support
+    - Icons for menu items (Lucide icons)
+    - Active state highlighting
+    - Hover dropdowns with smooth animations
+    - Theme-aware styling
+    - Mobile responsive (optional)
+    """
+    items = config.get("items", [
+        {"label": "Home", "url": "/", "active": True},
+        {"label": "Products", "url": "#", "items": [
+            {"label": "All Products", "url": "/products"},
+            {"label": "New Arrivals", "url": "/products/new"},
+            {"label": "Best Sellers", "url": "/products/best"}
+        ]},
+        {"label": "About", "url": "/about"},
+        {"label": "Contact", "url": "/contact"}
+    ])
+    brand = config.get("brand", "Brand")
+    brand_icon = config.get("brand_icon", "box")
+    show_icons = config.get("show_icons", True)
+    
+    # Generate unique ID for this nav menu
+    import random
+    nav_id = f"nav-menu-{random.randint(1000, 9999)}"
+    
+    # Build navigation items
+    nav_items_html = ""
+    for item in items:
+        label = item.get("label", "Menu")
+        url = item.get("url", "#")
+        icon = item.get("icon", "")
+        active = item.get("active", False)
+        subitems = item.get("items", [])
+        
+        # Active state styling
+        active_class = "text-blue-600 dark:text-blue-400 font-semibold" if active else "text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
+        
+        # Icon HTML if present
+        icon_html = f'<i data-lucide="{icon}" class="w-4 h-4"></i>' if icon and show_icons else ""
+        
+        if subitems:
+            # Navigation item with dropdown
+            dropdown_id = f"nav-dropdown-{random.randint(1000, 9999)}"
+            nav_items_html += f'''
+      <div class="relative group">
+        <button id="{dropdown_id}-trigger" class="flex items-center gap-2 px-4 py-2 text-sm font-medium {active_class} transition-colors rounded-md hover:bg-gray-100 dark:hover:bg-gray-800">
+          {icon_html}
+          <span>{label}</span>
+          <i data-lucide="chevron-down" class="w-4 h-4 transition-transform group-hover:rotate-180"></i>
+        </button>
+        
+        <!-- Dropdown Menu -->
+        <div id="{dropdown_id}-content" class="absolute left-0 top-full mt-2 w-56 origin-top-left rounded-md border border-gray-200 bg-white shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 dark:border-gray-700 dark:bg-gray-900 z-50">
+          <div class="p-1">
+'''
+            for subitem in subitems:
+                sub_label = subitem.get("label", "Submenu")
+                sub_url = subitem.get("url", "#")
+                sub_icon = subitem.get("icon", "")
+                sub_description = subitem.get("description", "")
+                sub_active = subitem.get("active", False)
+                
+                sub_active_class = "bg-gray-100 dark:bg-gray-800 text-blue-600 dark:text-blue-400" if sub_active else "hover:bg-gray-100 dark:hover:bg-gray-800"
+                sub_icon_html = f'<i data-lucide="{sub_icon}" class="w-4 h-4 text-gray-500"></i>' if sub_icon and show_icons else ""
+                
+                if sub_description:
+                    # Item with description
+                    nav_items_html += f'''
+            <a href="{sub_url}" class="flex items-start gap-3 rounded-md px-3 py-2 text-sm {sub_active_class} transition-colors">
+              {sub_icon_html}
+              <div class="flex-1">
+                <div class="font-medium text-gray-900 dark:text-white">{sub_label}</div>
+                <div class="text-xs text-gray-500 dark:text-gray-400">{sub_description}</div>
+              </div>
+            </a>
+'''
+                else:
+                    # Simple item
+                    nav_items_html += f'''
+            <a href="{sub_url}" class="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-gray-700 dark:text-gray-300 {sub_active_class} transition-colors">
+              {sub_icon_html}
+              <span>{sub_label}</span>
+            </a>
+'''
+            
+            nav_items_html += '''
+          </div>
+        </div>
+      </div>
+'''
+        else:
+            # Simple navigation link
+            nav_items_html += f'''
+      <a href="{url}" class="flex items-center gap-2 px-4 py-2 text-sm font-medium {active_class} transition-colors rounded-md hover:bg-gray-100 dark:hover:bg-gray-800">
+        {icon_html}
+        <span>{label}</span>
+      </a>
+'''
+    
+    return f'''
+<!-- Shadcn-style Navigation Menu -->
+<nav id="{nav_id}" class="border-b border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-950">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="flex h-16 items-center justify-between">
+      <!-- Brand -->
+      <div class="flex items-center gap-3">
+        <div class="flex h-8 w-8 items-center justify-center rounded-md bg-blue-600">
+          <i data-lucide="{brand_icon}" class="w-5 h-5 text-white"></i>
+        </div>
+        <span class="text-lg font-semibold text-gray-900 dark:text-white">{brand}</span>
+      </div>
+      
+      <!-- Navigation Items -->
+      <div class="hidden md:flex items-center gap-1">
+        {nav_items_html}
+      </div>
+      
+      <!-- Mobile Menu Button -->
+      <button id="{nav_id}-mobile-toggle" class="md:hidden rounded-md p-2 text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800">
+        <i data-lucide="menu" class="w-6 h-6"></i>
+      </button>
+    </div>
+  </div>
+  
+  <!-- Mobile Menu (hidden by default) -->
+  <div id="{nav_id}-mobile-menu" class="hidden md:hidden border-t border-gray-200 dark:border-gray-800">
+    <div class="space-y-1 px-4 py-3">
+      {nav_items_html.replace("relative group", "").replace("group-hover:opacity-100 group-hover:visible", "").replace("opacity-0 invisible", "hidden")}
+    </div>
+  </div>
+</nav>
+
+<script>
+(function() {{
+  // Mobile menu toggle
+  const mobileToggle = document.getElementById('{nav_id}-mobile-toggle');
+  const mobileMenu = document.getElementById('{nav_id}-mobile-menu');
+  
+  if (mobileToggle && mobileMenu) {{
+    mobileToggle.addEventListener('click', function() {{
+      mobileMenu.classList.toggle('hidden');
+    }});
+  }}
+  
+  // Initialize Lucide icons
+  if (typeof lucide !== 'undefined') {{
+    lucide.createIcons();
+  }}
+}})();
+</script>
+'''
 
 
 def _generate_breadcrumb(config):
