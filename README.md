@@ -1,546 +1,122 @@
-# KD UI Framework
+# KD UI
 
-A powerful MCP (Model Context Protocol) server that generates beautiful Flask/Jinja2 templates with DaisyUI components. Stop letting AI generate ugly UIs - use KD UI Framework to ensure consistent, modern, professional dashboards every time!
+MCP server that generates ready-to-use Flask + DaisyUI UI components. Ask your AI assistant to produce dashboards, forms, tables, navbars, sidebars, and more — they come out polished by default.
 
-## 🎯 Problem Solved
-
-When using AI to build Flask dashboards, you often get:
-- ❌ Ugly, inconsistent UIs
-- ❌ Outdated design patterns
-- ❌ Non-responsive layouts
-- ❌ Poor accessibility
-
-With KD UI Framework, you get:
-- ✅ Beautiful, modern dashboards
-- ✅ Consistent design system
-- ✅ Mobile & desktop responsive
-- ✅ Accessible components
-- ✅ Best practices enforced
-
-## 🚀 Features
-
-### MCP Server Tools
-
-1. **`create_dashboard`** - Generate complete dashboard layouts
-   - Sidebar or top navigation
-   - Stats cards for KPIs
-   - Chart containers
-   - Data tables
-   - Fully responsive
-
-2. **`create_landing_page`** - Generate complete landing pages
-   - Hero section with CTA buttons
-   - Features section (6-column grid)
-   - Testimonials with star ratings
-   - Pricing cards with "Popular" badge
-   - Call-to-action section
-   - Professional footer
-   - Fully responsive
-
-3. **`create_form`** - Generate beautiful forms
-   - Predefined forms (login, register, contact)
-   - Custom form builder
-   - Validation support
-   - Error handling
-
-4. **`create_table`** - Generate data tables
-   - Sortable columns
-   - Search/filter
-   - Pagination
-   - Row actions
-   - Responsive (cards on mobile)
-
-5. **`add_component`** - Add individual components
-   - Stat cards
-   - Alerts
-   - Badges, buttons, cards
-   - Modals, navbars, sidebars
-   - Breadcrumbs, tabs, progress bars
-   - Chart containers
-   - **Theme toggle** - Dark/Light mode switcher 🌙
-   - **Landing page components:**
-     - Hero sections
-     - Features grids
-     - Testimonials
-     - Pricing cards
-     - CTA banners
-     - Footers
-
-### Design System
-
-- **Color Palette**: Primary, secondary, accent, semantic colors
-- **Typography**: Consistent font sizes and weights
-- **Spacing**: 4px-based spacing system
-- **Components**: Pre-styled DaisyUI components
-- **Best Practices**: Built-in UI/UX guidelines
+**Stack**: Tailwind CSS + DaisyUI 4 + Lucide Icons + Chart.js, delivered via CDN. No build step required.
 
 ---
 
-## 📦 Installation
+## Installation
 
-### Step 1: Clone the Repository
+### 1. Clone and set up
 
 ```bash
 git clone https://github.com/windseeker5/kdui_mcp.git
 cd kdui_mcp
-```
 
-### Step 2: Create Virtual Environment
-
-```bash
+# Create and activate virtual environment
 python -m venv venv
-```
+source venv/bin/activate          # Linux / macOS
+# venv\Scripts\activate           # Windows
 
-### Step 3: Activate Virtual Environment
-
-**Windows (PowerShell):**
-```powershell
-venv\Scripts\activate
-```
-
-**Windows (CMD):**
-```cmd
-venv\Scripts\activate
-```
-
-**Linux/macOS:**
-```bash
-source venv/bin/activate
-```
-
-### Step 4: Configure Proxy (Corporate Networks Only)
-
-If you're behind a corporate proxy, set these environment variables:
-
-**PowerShell:**
-```powershell
-$env:HTTP_PROXY="http://your-proxy:port"
-$env:HTTPS_PROXY="http://your-proxy:port"
-```
-
-**CMD:**
-```cmd
-set HTTP_PROXY=http://your-proxy:port
-set HTTPS_PROXY=http://your-proxy:port
-```
-
-**Linux/macOS:**
-```bash
-export HTTP_PROXY="http://your-proxy:port"
-export HTTPS_PROXY="http://your-proxy:port"
-```
-
-### Step 5: Install Dependencies
-
-```bash
+# Install the MCP server package
 pip install -e mcp-server
 ```
 
-### Step 6: Run Setup Wizard
+### 2. Configure your AI tool
+
+#### Claude Code (recommended — project-scoped)
+
+A `.mcp.json` file is already at the project root. Update the `command` path to match your cloned location:
+
+```json
+{
+  "mcpServers": {
+    "kd-ui": {
+      "command": "/absolute/path/to/kdui_mcp/venv/bin/python",
+      "args": ["-m", "kd_ui_server.server"],
+      "cwd": "/absolute/path/to/kdui_mcp/mcp-server"
+    }
+  }
+}
+```
+
+Claude Code auto-detects `.mcp.json` when you open the project. No other config needed.
+
+#### Claude Code (global install)
 
 ```bash
-python setup.py
+claude mcp add kd-ui \
+  --command "/absolute/path/to/kdui_mcp/venv/bin/python" \
+  -- -m kd_ui_server.server
 ```
 
-The setup wizard will configure the MCP server in your AI tool (Cline or Claude Desktop).
+#### VS Code — Cline extension
 
-### Step 7: Restart Your AI Tool
+Open VS Code Settings → search for **Cline MCP** → add a new server entry:
 
-- **Cline**: Reload VS Code window
-- **Claude Desktop**: Restart the application
+| Field | Value |
+|---|---|
+| Name | `kd-ui` |
+| Command | `/absolute/path/to/kdui_mcp/venv/bin/python` |
+| Args | `-m kd_ui_server.server` |
+| Working directory | `/absolute/path/to/kdui_mcp/mcp-server` |
 
-**That's it! You're ready to go! 🎉**
+Then reload the VS Code window.
 
----
+#### Claude Desktop
 
-## 🚀 Your First Dashboard in 60 Seconds
+Add to `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `%APPDATA%\Claude\claude_desktop_config.json` (Windows):
 
-After completing the setup, let's create a beautiful dashboard to see the framework in action!
-
-### Quick Demo
-
-1. **Navigate to the example:**
-   ```bash
-   cd examples/first_dashboard
-   pip install flask
-   python app.py
-   ```
-
-2. **Open your browser:**
-   Visit **http://localhost:5001** to see a beautiful sales dashboard with:
-   - 📊 Stats cards (Revenue, Orders, Customers, Conversion Rate)
-   - 📈 Revenue trend chart
-   - 📋 Recent orders table
-   - 🎨 Fully responsive design
-
-### Create Your Own Dashboard (Hello World!)
-
-**The Simple Prompt - Copy & Paste This:**
-
-```
-Using the create_dashboard MCP tool, generate a sales dashboard with:
-- Sidebar layout
-- Title: "Sales Dashboard"
-- Components: stats, charts, table
-```
-
-**Or ask naturally:**
-
-```
-Create a sales dashboard with sidebar navigation, stat cards for revenue/users/sessions/conversion, 
-revenue trend chart, and a recent orders table
-```
-
-**What the MCP tool generates:**
-
-The tool automatically creates a **Shadcn-quality** Flask template with:
-
-✅ **Modern Lucide Icons** - Clean, professional icons throughout
-✅ **Shadcn Color Palette** - Blue-600 primary, subtle gray backgrounds
-✅ **Beautiful Stat Cards** - White cards with subtle borders, generous padding (p-6), and shadow-sm
-✅ **Clean Sidebar** - Gray-50 background, active state highlighting, smooth hover transitions  
-✅ **Professional Table** - Horizontal borders only, hover states, color-coded status badges
-✅ **Chart Containers** - Icon headers, proper spacing
-✅ **Inter Font** - Modern, clean typography
-✅ **Fully Responsive** - Mobile drawer, desktop sidebar, responsive grid
-
-**The Result: Production-Ready, Shadcn-Quality UI**
-
-![Sales Dashboard](examples/first_dashboard/screenshot.png)
-
-No hand-coding needed - the MCP tool generates everything! 🎉
-
----
-
-## 🌐 Your First Landing Page
-
-Want to create a beautiful landing page? It's just as easy!
-
-### Quick Demo
-
-1. **Navigate to the landing page example:**
-   ```bash
-   cd examples/landing_page
-   python app.py
-   ```
-
-2. **Open your browser:**
-   Visit **http://localhost:5002** to see a complete landing page with:
-   - 🚀 Hero section with gradient background
-   - ⚡ Features grid with Lucide icons
-   - 💬 Testimonials with 5-star ratings
-   - 💰 Pricing cards with "Popular" badge
-   - 📣 Call-to-action banner
-   - 🔗 Professional footer with social links
-
-### Create Your Own Landing Page (Hello World!)
-
-**The Simple Prompt - Copy & Paste This:**
-
-```
-Using the create_landing_page MCP tool, generate a landing page for my product
-```
-
-**Or ask naturally:**
-
-```
-Create a landing page with hero section, features, testimonials, pricing, and footer
-```
-
-**What the MCP tool generates:**
-
-The tool automatically creates a **complete Shadcn-quality** landing page with:
-
-✅ **Hero Section** - Large headline, subtitle, CTA buttons with Lucide icons
-✅ **Features Grid** - 6 features in responsive 3-column layout with icon badges
-✅ **Testimonials** - Customer quotes with avatars and 5-star ratings
-✅ **Pricing Cards** - 3 tiers with highlighted "Popular" option
-✅ **CTA Banner** - Gradient background with compelling call-to-action
-✅ **Footer** - Multi-column layout with social media links
-✅ **Fully Responsive** - Looks perfect on mobile, tablet, and desktop
-
-**The Result: Production-Ready Landing Page in Seconds!**
-
-No design skills needed - the MCP tool handles everything! 🎉
-
----
-
-## 🌙 Dark Mode Support
-
-**NEW!** All dashboards and components now support dark/light mode toggle!
-
-### Features
-
-- 🌓 **Automatic Theme Toggle** - Moon/Sun icon button in navbar
-- 💾 **Persistent Preference** - Saves your choice in localStorage
-- 🎨 **DaisyUI Themes** - Uses built-in light and dark themes
-- ⚡ **Smooth Transitions** - Icons change instantly
-- 🔄 **Works Everywhere** - All components adapt automatically
-
-### How It Works
-
-The theme toggle is **automatically included** in:
-- ✅ Dashboard navbars
-- ✅ Landing page navbars
-- ✅ Any component with `navbar` 
-
-**No extra code needed!** Just generate your dashboard and the toggle is there.
-
-### Usage
-
-**For users:**
-- Click the moon icon (🌙) to switch to dark mode
-- Click the sun icon (☀️) to switch to light mode
-- Your preference is saved automatically
-
-**For developers:**
-You can also add standalone theme toggles:
-
-```python
-from kd_ui_server.tools.component import add_component
-
-# Standalone toggle button
-toggle = add_component("theme_toggle", {"position": "standalone"})
-
-# Floating toggle (bottom-right)
-floating_toggle = add_component("theme_toggle", {"position": "floating"})
-
-# In navbar (default, automatic)
-navbar = add_component("navbar", {
-    "brand": "My App",
-    "theme_toggle": True  # Default: True
-})
-```
-
-### Customization
-
-Disable theme toggle in navbar:
-
-```python
-navbar = add_component("navbar", {
-    "brand": "My App",
-    "theme_toggle": False  # Disable theme toggle
-})
-```
-
----
-
-## 🎨 Usage Examples
-
-### Example 1: Create a Dashboard
-
-**You ask AI:**
-> "Create a sales dashboard with sidebar navigation, stats cards for revenue and users, and a chart"
-
-**AI uses MCP tool:**
 ```json
 {
-  "tool": "create_dashboard",
-  "layout": "sidebar",
-  "title": "Sales Dashboard",
-  "components": ["stats", "charts"]
-}
-```
-
-**You get:**
-A complete, beautiful Flask template with:
-- Responsive sidebar navigation
-- Professional stats cards
-- Chart containers ready for Chart.js
-- Mobile-friendly design
-
-### Example 2: Create a Login Form
-
-**You ask AI:**
-> "Create a login form"
-
-**AI uses MCP tool:**
-```json
-{
-  "tool": "create_form",
-  "form_type": "login"
-}
-```
-
-**You get:**
-A beautiful, centered login form with:
-- Email and password fields
-- "Forgot password" link
-- Error message display
-- Link to registration page
-
-### Example 3: Create a Data Table
-
-**You ask AI:**
-> "Create a table to display users with name, email, status, and actions"
-
-**AI uses MCP tool:**
-```json
-{
-  "tool": "create_table",
-  "columns": [
-    {"name": "name", "label": "Name"},
-    {"name": "email", "label": "Email"},
-    {"name": "status", "label": "Status", "type": "badge"}
-  ],
-  "features": ["search", "sort", "pagination", "actions"]
-}
-```
-
-**You get:**
-An interactive table with:
-- Search functionality
-- Sortable columns
-- Pagination
-- Edit/Delete actions
-
----
-
-## 📁 Project Structure
-
-```
-KD UI Framework/
-├── README.md                     # This file
-├── setup.py                      # MCP configuration wizard
-├── SETUP_STEPS.md               # Detailed setup instructions
-├── QUICK_START.md               # Quick reference guide
-├── RESEARCH_AND_OPTIONS.md      # Framework options guide
-├── DECISION_MATRIX.md           # Comparison of approaches
-├── FLASK_INTEGRATION_GUIDE.md   # Flask + DaisyUI setup
-├── examples/                    # Example projects
-│   └── first_dashboard/         # Sales dashboard demo
-│       ├── app.py
-│       ├── templates/
-│       └── README.md
-└── mcp-server/                  # MCP Server
-    ├── pyproject.toml
-    ├── src/
-    │   └── kd_ui_server/
-    │       ├── server.py        # Main MCP server
-    │       ├── design_system.py # Color palette, typography
-    │       ├── resources.py     # Templates and best practices
-    │       └── tools/           # Tool implementations
-    │           ├── dashboard.py
-    │           ├── form.py
-    │           ├── table.py
-    │           └── component.py
-    └── venv/                    # Virtual environment (you create this)
-```
-
----
-
-## 🎯 Design System
-
-### Colors
-
-- **Primary**: Blue (#3b82f6) - Main actions, important CTAs
-- **Secondary**: Slate (#64748b) - Supporting elements
-- **Accent**: Purple (#d946ef) - Highlights, special elements
-- **Success**: Green (#10b981) - Positive metrics
-- **Warning**: Amber (#f59e0b) - Caution states
-- **Error**: Red (#ef4444) - Problems, failures
-
-### Typography
-
-- **Headings**: Inter, Bold (h1: 36px, h2: 30px, h3: 24px)
-- **Body**: Inter, Regular (16px)
-- **Small**: Inter, Regular (14px)
-
-### Spacing
-
-Based on 4px units: 4px, 8px, 12px, 16px, 24px, 32px, 48px, 64px
-
----
-
-## 🔧 Customization
-
-### Changing Colors
-
-Edit `mcp-server/src/kd_ui_server/design_system.py`:
-
-```python
-"daisyui_themes": {
-    "light": {
-        "primary": "#your-color",  # Change primary color
-        ...
+  "mcpServers": {
+    "kd-ui": {
+      "command": "/absolute/path/to/kdui_mcp/venv/bin/python",
+      "args": ["-m", "kd_ui_server.server"],
+      "cwd": "/absolute/path/to/kdui_mcp/mcp-server"
     }
+  }
 }
 ```
 
-### Adding New Components
-
-1. Add function to `tools/component.py`
-2. Register in `add_component()` function
-3. Update tool schema in `server.py`
+Restart Claude Desktop.
 
 ---
 
-## 🐛 Troubleshooting
+## Available tools
 
-### Proxy Errors
-If you see "Cannot connect to proxy" or "getaddrinfo failed" errors during installation:
-1. Configure your proxy settings (see Step 4)
-2. Run `pip install -e mcp-server` again
+| Tool | Description |
+|---|---|
+| `create_dashboard` | Full dashboard layout — sidebar or top-nav, stats, charts, table |
+| `create_form` | Form templates — login, register, contact, or custom fields |
+| `create_table` | Data table with search, sort, and pagination |
+| `add_component` | Individual components — see full list below |
 
-### Virtual Environment Not Activated
-Make sure you see `(venv)` at the beginning of your terminal prompt. If not:
-- Windows: Run `venv\Scripts\activate`
-- Linux/macOS: Run `source venv/bin/activate`
+### `add_component` types
 
-### MCP Server Not Found in Cline/Claude
-1. Check that the setup wizard completed successfully
-2. Restart VS Code or Claude Desktop
-3. Verify the configuration file was updated (setup wizard shows the location)
+**UI components**: `badge`, `button`, `alert`, `card`, `progress`, `skeleton`, `typography`, `stat_card`, `modal`, `tabs`, `breadcrumb`, `dropdown_menu`, `navbar`, `sidebar`, `navigation_menu`, `chart_container`, `theme_toggle`
 
-### Dependencies Not Installing
-If `pip install -e mcp-server` fails:
-1. Make sure your virtual environment is activated
-2. Check your internet connection or proxy settings
-3. Try updating pip: `python -m pip install --upgrade pip`
+**Landing page sections**: `hero`, `features`, `testimonials`, `pricing`, `cta`, `footer`
 
 ---
 
-## 📚 Resources
+## Example prompts
 
-- [DaisyUI Documentation](https://daisyui.com/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Chart.js](https://www.chartjs.org/)
-- [Flask Documentation](https://flask.palletsprojects.com/)
-- [MCP Protocol](https://modelcontextprotocol.io/)
+```
+Create a sales dashboard with sidebar navigation, stat cards for revenue and active users, and a monthly revenue chart.
+```
 
----
+```
+Add a dropdown menu with Profile, Settings, and Log out items.
+```
 
-## ✨ Tips for Best Results
-
-1. **Always use the MCP tools** - Don't let AI generate UI from scratch
-2. **Start with dashboard/form templates** - Then customize as needed
-3. **Reference the design system** - Ask AI to use the color palette
-4. **Test responsiveness** - Check mobile and desktop views
-5. **Keep it simple** - Don't overcomplicate layouts
+```
+Generate a login form.
+```
 
 ---
 
-## 🎓 Learning Resources
+## See also
 
-See the following guides in this repository:
-
-- **RESEARCH_AND_OPTIONS.md** - Deep dive into UI framework options
-- **DECISION_MATRIX.md** - Why we chose this approach
-- **FLASK_INTEGRATION_GUIDE.md** - Detailed Flask + DaisyUI setup
-- **SETUP_STEPS.md** - Detailed step-by-step setup guide
-
----
-
-## 🤝 Contributing
-
-This is a personal framework, but feel free to fork and customize for your needs!
-
----
-
-## 📄 License
-
-MIT License - Use freely in your projects
-
----
-
-**Made with ❤️ to solve the "ugly AI UI" problem**
+- `SHOWCASE.md` — run the component showcase locally to browse every component

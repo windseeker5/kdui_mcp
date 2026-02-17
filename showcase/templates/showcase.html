@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KD UI Component Showcase</title>
+
+  <!-- Inter Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS + DaisyUI -->
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <style>
+    body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+
+    .section-card {
+      background: var(--b1);
+      border-radius: 0.75rem;
+      border: 1px solid oklch(var(--b3));
+      padding: 1.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .mcp-snippet pre {
+      background: oklch(var(--b2));
+      border-radius: 0.5rem;
+      padding: 1rem;
+      font-size: 0.8rem;
+      overflow-x: auto;
+      margin-top: 0.5rem;
+      border: 1px solid oklch(var(--b3));
+    }
+
+    .mcp-snippet summary {
+      font-size: 0.8rem;
+      color: oklch(var(--bc) / 0.5);
+      cursor: pointer;
+      user-select: none;
+      padding: 0.5rem 0;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+    }
+
+    .mcp-snippet summary:hover { color: oklch(var(--bc) / 0.8); }
+    .mcp-snippet summary::before { content: '{ }'; font-weight: 600; font-family: monospace; }
+
+    .demo-wrap {
+      background: oklch(var(--b1));
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+      border: 1px solid oklch(var(--b3) / 0.5);
+    }
+
+    .section-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: oklch(var(--bc) / 0.35);
+      margin-bottom: 0.25rem;
+    }
+
+    .preview-frame {
+      overflow: hidden;
+      border-radius: 0.5rem;
+      border: 1px solid oklch(var(--b3) / 0.5);
+    }
+
+    .toc-link {
+      display: block;
+      padding: 0.25rem 0.75rem;
+      font-size: 0.8rem;
+      border-radius: 0.375rem;
+      color: oklch(var(--bc) / 0.6);
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+
+    .toc-link:hover {
+      background: oklch(var(--b2));
+      color: oklch(var(--bc));
+    }
+  </style>
+
+  <script>
+    (function () {
+      const html = document.documentElement;
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      html.setAttribute('data-theme', savedTheme);
+
+      function updateThemeIcon(theme) {
+        const icon = document.getElementById('theme-icon');
+        if (icon) {
+          icon.setAttribute('data-lucide', theme === 'light' ? 'moon' : 'sun');
+          if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        updateThemeIcon(savedTheme);
+
+        const toggle = document.getElementById('theme-toggle');
+        if (toggle) {
+          toggle.addEventListener('click', function () {
+            const current = html.getAttribute('data-theme');
+            const next = current === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+          });
+        }
+
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+      });
+    })();
+  </script>
+</head>
+
+<body class="bg-base-200 min-h-screen">
+
+  <!-- ═══════════════════════════════════════════════════ TOP BAR -->
+  <header class="sticky top-0 z-50 bg-base-100 border-b border-base-300 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="flex h-7 w-7 items-center justify-center rounded-md bg-blue-600">
+          <i data-lucide="layers" class="w-4 h-4 text-white"></i>
+        </div>
+        <div>
+          <h1 class="text-sm font-semibold leading-none">KD UI Component Showcase</h1>
+          <p class="text-xs text-base-content/40 mt-0.5">All components · Light / Dark</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="hidden sm:inline-flex items-center gap-1 text-xs bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300 px-2 py-1 rounded-full font-medium">
+          <i data-lucide="package" class="w-3 h-3"></i> kd-ui-mcp-server
+        </span>
+        <button id="theme-toggle" class="btn btn-ghost btn-sm btn-circle" aria-label="Toggle theme">
+          <i id="theme-icon" data-lucide="moon" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════════════════════════════ LAYOUT -->
+  <div class="max-w-7xl mx-auto flex gap-0 lg:gap-8 px-4 py-8">
+
+    <!-- Left TOC (desktop only) -->
+    <aside class="hidden lg:block w-48 flex-shrink-0">
+      <div class="sticky top-20">
+        <p class="text-xs font-semibold text-base-content/40 uppercase tracking-widest mb-3 px-3">UI Components</p>
+        <nav class="space-y-0.5">
+          <a href="#badges" class="toc-link">Badge</a>
+          <a href="#buttons" class="toc-link">Button</a>
+          <a href="#alerts" class="toc-link">Alert</a>
+          <a href="#card" class="toc-link">Card</a>
+          <a href="#progress" class="toc-link">Progress</a>
+          <a href="#skeleton" class="toc-link">Skeleton</a>
+          <a href="#typography" class="toc-link">Typography</a>
+          <a href="#stat-card" class="toc-link">Stat Card</a>
+          <a href="#modal" class="toc-link">Modal</a>
+          <a href="#tabs" class="toc-link">Tabs</a>
+          <a href="#breadcrumb" class="toc-link">Breadcrumb</a>
+          <a href="#dropdown" class="toc-link">Dropdown Menu</a>
+          <a href="#navbar" class="toc-link">Navbar</a>
+          <a href="#sidebar" class="toc-link">Sidebar</a>
+          <a href="#nav-menu" class="toc-link">Navigation Menu</a>
+          <a href="#chart" class="toc-link">Chart Container</a>
+          <a href="#form" class="toc-link">Form</a>
+          <a href="#table" class="toc-link">Table</a>
+        </nav>
+        <p class="text-xs font-semibold text-base-content/40 uppercase tracking-widest mt-5 mb-3 px-3">Landing Page</p>
+        <nav class="space-y-0.5">
+          <a href="#hero" class="toc-link">Hero</a>
+          <a href="#features" class="toc-link">Features</a>
+          <a href="#testimonials" class="toc-link">Testimonials</a>
+          <a href="#pricing" class="toc-link">Pricing</a>
+          <a href="#cta" class="toc-link">CTA</a>
+          <a href="#footer" class="toc-link">Footer</a>
+        </nav>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="flex-1 min-w-0 space-y-8">
+
+      <!-- ─────────────────────────────────────────── BADGES -->
+      <section id="badges">
+        <div class="section-card">
+          <div class="section-label">Component</div>
+          <h2 class="text-base font-semibold mb-4">Badge</h2>
+          <div class="demo-wrap flex flex-wrap gap-3 items-center">
+            {{ c.badge_default | safe }}
+            {{ c.badge_secondary | safe }}
+            {{ c.badge_destructive | safe }}
+            {{ c.badge_outline | safe }}
+            {{ c.badge_success | safe }}
+            {{ c.badge_warning | safe }}
+          </div>
+          <details class="mcp-snippet mt-4">
+            <summary>Show MCP usage</summary>
+            <pre><code>add_component(
+    component_type="badge",
+    config={
+        "text": "Default",
+        "variant": "default"  # default | secondary | destructive | outline | success | warning
+    }
+)</code></pre>
+          </details>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────── BUTTONS -->
+      <section id="buttons">
+        <div class="section-card">
+          <div class="section-label">Component</div>
+          <h2 class="text-base font-semibold mb-4">Button</h2>
+          <div class="demo-wrap space-y-4">
+            <div>
+              <p class="text-xs text-base-content/50 mb-2 font-medium">Sizes (primary)</p>
+              <div class="flex flex-wrap gap-3 items-center">
+                {{ c.btn_primary_sm | safe }}
+                {{ c.btn_primary_md | safe }}
+                {{ c.btn_primary_lg | safe }}
+              </div>
+            </div>
+            <div>
+              <p class="text-xs text-base-content/50 mb-2 font-medium">Variants</p>
+              <div class="flex flex-wrap gap-3 items-center">
+                {{ c.btn_secondary | safe }}
+                {{ c.btn_accent | safe }}
+                {{ c.btn_ghost | safe }}
+                {{ c.btn_link | safe }}
+              </div>
+            </div>
+          </div>
+          <details class="mcp-snippet mt-4">
+            <summary>Show MCP usage</summary>
+            <pre><code>add_component(
+    component_type="button",
+    config={
+        "text": "Click me",
+        "variant": "primary",  # primary | secondary | accent | ghost | link
+        "size": "md"           # sm | md | lg
+    }
+)</code></pre>
+          </details>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────── ALERTS -->
+      <section id="alerts">
+        <div class="section-card">
+          <div class="section-label">Component</div>
+          <h2 class="text-base font-semibold mb-4">Alert</h2>
+          <div class="demo-wrap space-y-3">
+            {{ c.alert_info | safe }}
+            {{ c.alert_success | safe }}
+            {{ c.alert_warning | safe }}
+            {{ c.alert_error | safe }}
+          </div>
+          <details class="mcp-snippet mt-4">
+            <summary>Show MCP usage</summary>
+            <pre><code>add_component(
+    component_type="alert",
+    config={
+        "message": "Operation completed successfully!",
+        "type": "success"  # info | success | warning | error
+    }
+)</code></pre>
+          </details>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────── CARD -->
+      <section id="card">
+        <div class="section-card">
+          <div class="section-label">Component</div>
+          <h2 class="text-base font-semibold mb-4">Card</h2>
+          <div class="demo-wrap max-w-sm">
+            {{ c.card | safe }}
+          </div>
+          <details class="mcp-snippet mt-4">
+            <summary>Show MCP usage</summary>
+            <pre><code>add_component(
+    component_type="card",
+    config={
+        "title": "Card Title",
+        "content": "Card body text goes here.",
+        "actions": True  # adds action button in footer
+    }
+)</code></pre>
+          </details>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────── PROGRESS -->
+      <section id="progress">
+        <div class="section-card">
+          <div class="section-label">Component</div>
+          <h2 class="text-base font-semibold mb-4">Progress</h2>
+          <div class="demo-wrap space-y-5">
+            {{ c.progress_default | safe }}
+            {{ c.progress_success | safe }}
+            {{ c.progress_warning | safe }}
+            {{ c.progress_destructive | safe }}
+          </div>
+          <details class="mcp-snippet mt-4">
+            <summary>Show MCP usage</summary>
+            <pre><code>add_component(
+    component_type="progress",
+    config={
+        "value": 65,
+        "max": 100,
+        "variant": "success",   # default | success | warning | destructive
+        "show_label": True
+    }
+)</code></pre>
+          </details>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────── SKELETON -->
+      <section id="skeleton">
+        <div class="section-card">
+          <div class="section-label">Component</div>
+          <h2 class="text-base font-semibold mb-4">Skeleton</h2>
+          <div class="demo-wrap space-y-6">
+            <div>
+              <p class="text-xs text-base-content/50 mb-2 font-medium">Text (3 lines)</p>
+              {{ c.skeleton_text | safe }}
+            </div>
+            <div class="flex gap-6 items-center">
+              <div>
+                <p class="text-xs text-base-content/50 mb-2 font-medium">Circle</p>
+                {{ c.skeleton_circle | safe }}
+              </div>
+              <div class="flex-1">
+                <p class="text-xs text-base-content/50 mb-2 font-medium">Rectangle</p>
+                {{ c.skeleton_rectangle | safe }}
+              </div>
+            </div>
+          </div>
+          <details class="mcp-snippet mt-4">
+            <summary>Show MCP usage</summary>
+            <pre><code>add_component(
+    component_type="skeleton",
+    config={
+        "type": "text",     # text | circle | rectangle
+        "count": 3,         # for text: number of lines
+        "size": "48px",     # for circle: diameter
+        "height": "200px",  # for rectangle
+        "width": "100%"
+    }
+)</code></pre>
+          </details>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────── TYPOGRAPHY -->
+      <section id="typography">
+        <div class="section-card">
+          <div class="section-label">Component</div>
+          <h2 class="text-base font-semibold mb-4">Typography</h2>
+          <div class="demo-wrap space-y-4">
+            {{ c.typo_h1 | safe }}
+            {{ c.typo_h2 | safe }}
+            {{ c.typo_h3 | safe }}
+            {{ c.typo_h4 | safe }}
+            <hr class="border-base-300">
+            {{ c.typo_lead | safe }}
+            {{ c.typo_muted | safe }}
+            {{ c.typo_blockquote | safe }}
+            <div class="flex items-center gap-2">
+              <span class="text-sm text-base-content/60">Inline code:</span>
+              {{ c.typo_code | safe }}
+            </div>
+            {{ c.typo_list | safe }}
+          </div>
+          <details class="mcp-snippet mt-4">
+            <summary>Show MCP usage</summary>
+            <pre><code>add_component(
+    component_type="typography",
+    config={
+        "type": "h1",  # h1 | h2 | h3 | h4 | p | lead | large | small | muted | blockquote | code | list
+        "text": "Heading 1",
+        # for list type:
+        # "items": ["Item one", "Item two"],
+        # "list_type": "ul"  # ul | ol
+    }
+)</code></pre>
+          </details>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────── STAT CARD -->
+      <section id="stat-card">
+        <div class="section-card">
+          <div class="section-label">Component</div>
+          <h2 class="text-base font-semibold mb-4">Stat Card</h2>
+          <div class="demo-wrap flex flex-wrap gap-4">
+            {{ c.stat_revenue | safe }}
+            {{ c.stat_users | safe }}
+          </div>
+          <details class="mcp-snippet mt-4">
+            <summary>Show MCP usage</summary>
+            <pre><code>add_component(
+    component_type="stat_card",
+    config={
+        "title": "Total Revenue",
+        "value": "$45,231",
+        "description": "↑ 20.1% from last month",
+        "color": "primary"  # primary | success | warning | error | info
+    }
+)</code></pre>
+          </details>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────── MODAL -->
+      <section id="modal">
+        <div class="section-card">
+          <div class="section-label">Component</div>
+          <h2 class="text-base font-semibold mb-4">Modal</h2>
+          <div class="demo-wrap">
+            {{ c.modal | safe }}
+          </div>
+          <details class="mcp-snippet mt-4">
+            <summary>Show MCP usage</summary>
+            <pre><code>add_component(
+    component_type="modal",
+    config={
+        "id": "confirm_modal",
+        "title": "Confirm Action",
+        "content": "Are you sure you want to proceed?"
+    }
+)</code></pre>
+          </details>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────── TABS -->
+      <section id="tabs">
+        <div class="section-card">
+          <div class="section-label">Component</div>
+          <h2 class="text-base font-semibold mb-4">Tabs</h2>
+          <div class="demo-wrap">
+            {{ c.tabs | safe }}
+          </div>
+          <details class="mcp-snippet mt-4">
+            <summary>Show MCP usage</summary>
+            <pre><code>add_component(
+    component_type="tabs",
+    config={
+        "tabs": [
+            {"id": "tab1", "label": "Overview", "content": "...", "active": True},
+            {"id": "tab2", "label": "Analytics", "content": "..."},
+            {"id": "tab3", "label": "Settings", "content": "..."},
+        ]
+    }
+)</code></pre>
+          </details>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────── BREADCRUMB -->
+      <section id="breadcrumb">
+        <div class="section-card">
+          <div class="section-label">Component</div>
+          <h2 class="text-base font-semibold mb-4">Breadcrumb</h2>
+          <div class="demo-wrap">
+            {{ c.breadcrumb | safe }}
+          </div>
+          <details class="mcp-snippet mt-4">
+            <summary>Show MCP usage</summary>
+            <pre><code>add_component(
+    component_type="breadcrumb",
+    config={
+        "items": [
+            {"label": "Home", "url": "/"},
+            {"label": "Components", "url": "/components"},
+            {"label": "Breadcrumb"},  # no url = current page
+        ]
+    }
+)</code></pre>
+          </details>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────── DROPDOWN MENU -->
+      <section id="dropdown">
+        <div class="section-card">
+          <div class="section-label">Component</div>
+          <h2 class="text-base font-semibold mb-4">Dropdown Menu</h2>
+          <div class="demo-wrap" style="min-height: 220px;">
+            {{ c.dropdown | safe }}
+          </div>
+          <details class="mcp-snippet mt-4">
+            <summary>Show MCP usage</summary>
+            <pre><code>add_component(
+    component_type="dropdown_menu",
+    config={
+        "trigger_text": "My Account",
+        "trigger_icon": "user",
+        "trigger_variant": "outline",  # outline | ghost | default
+        "align": "end",                # start | center | end
+        "items": [
+            {"type": "label", "text": "My Account"},
+            {"type": "item", "icon": "user", "text": "Profile", "shortcut": "⇧⌘P"},
+            {"type": "item", "icon": "settings", "text": "Settings"},
+            {"type": "separator"},
+            {"type": "item", "icon": "log-out", "text": "Log out", "variant": "destructive"},
+        ]
+    }
+)</code></pre>
+          </details>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────── NAVBAR -->
+      <section id="navbar">
+        <div class="section-card">
+          <div class="section-label">Component</div>
+          <h2 class="text-base font-semibold mb-4">Navbar</h2>
+          <div class="preview-frame">
+            {{ c.navbar | safe }}
+          </div>
+          <details class="mcp-snippet mt-4">
+            <summary>Show MCP usage</summary>
+            <pre><code>add_component(
+    component_type="navbar",
+    config={
+        "brand": "MyApp",
+        "items": ["Home", "Products", "Docs", "Blog"],
+        "theme_toggle": True  # include built-in theme toggle button
+    }
+)</code></pre>
+          </details>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────── SIDEBAR -->
+      <section id="sidebar">
+        <div class="section-card">
+          <div class="section-label">Component</div>
+          <h2 class="text-base font-semibold mb-4">Sidebar</h2>
+          <div class="preview-frame" style="height: 380px; overflow: hidden;">
+            {{ c.sidebar | safe }}
+          </div>
+          <details class="mcp-snippet mt-4">
+            <summary>Show MCP usage</summary>
+            <pre><code>add_component(
+    component_type="sidebar",
+    config={
+        "brand": "KD UI",
+        "brand_icon": "layers",
+        "collapsible": True,
+        "items": [
+            {"icon": "layout-dashboard", "label": "Dashboard", "url": "/", "active": True},
+            {"icon": "bar-chart-2", "label": "Analytics", "url": "/analytics"},
+            {"icon": "users", "label": "Users", "url": "/users",
+             "badge": {"text": "3", "variant": "destructive"}},
+            {"icon": "settings", "label": "Settings", "url": "/settings"},
+            # Submenu example:
+            # {"icon": "folder", "label": "Projects", "submenu": [
+            #     {"label": "All Projects", "url": "/projects"},
+            #     {"label": "New Project", "url": "/projects/new"},
+            # ]},
+        ]
+    }
+)</code></pre>
+          </details>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────── NAVIGATION MENU -->
+      <section id="nav-menu">
+        <div class="section-card">
+          <div class="section-label">Component</div>
+          <h2 class="text-base font-semibold mb-4">Navigation Menu <span class="text-xs font-normal text-base-content/40 ml-1">— hover "Products" to see dropdown</span></h2>
+          <!-- Note: no overflow:hidden here so dropdown menus can appear below the nav bar -->
+          <div class="rounded-lg border border-base-300/50" style="position: relative; z-index: 10;">
+            {{ c.nav_menu | safe }}
+          </div>
+          <details class="mcp-snippet mt-4">
+            <summary>Show MCP usage</summary>
+            <pre><code>add_component(
+    component_type="navigation_menu",
+    config={
+        "brand": "Acme Co",
+        "brand_icon": "building-2",
+        "items": [
+            {"label": "Home", "url": "/", "active": True},
+            {"label": "Products", "url": "#", "items": [
+                {"label": "Analytics", "url": "/analytics", "description": "Real-time insights"},
+                {"label": "Automation", "url": "/automation", "description": "Workflow tools"},
+            ]},
+            {"label": "Docs", "url": "/docs"},
+        ]
+    }
+)</code></pre>
+          </details>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────── CHART CONTAINER -->
+      <section id="chart">
+        <div class="section-card">
+          <div class="section-label">Component</div>
+          <h2 class="text-base font-semibold mb-4">Chart Container</h2>
+          <div class="demo-wrap">
+            {{ c.chart | safe }}
+          </div>
+          <details class="mcp-snippet mt-4">
+            <summary>Show MCP usage</summary>
+            <pre><code>add_component(
+    component_type="chart_container",
+    config={
+        "id": "revenueChart",
+        "title": "Monthly Revenue",
+        "height": "400px"
+    }
+)
+# Customize the Chart.js data/type in the generated &lt;script&gt; block</code></pre>
+          </details>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────── FORM -->
+      <section id="form">
+        <div class="section-card">
+          <div class="section-label">Component</div>
+          <h2 class="text-base font-semibold mb-4">Form <span class="text-xs font-normal text-base-content/40 ml-1">— login preset</span></h2>
+          <div class="preview-frame" style="height: 500px; overflow-y: auto;">
+            {{ c.form | safe }}
+          </div>
+          <details class="mcp-snippet mt-4">
+            <summary>Show MCP usage</summary>
+            <pre><code>create_form(
+    form_type="login"  # login | register | contact | custom
+)
+
+# Custom form example:
+create_form(
+    form_type="custom",
+    fields=[
+        {"name": "title", "type": "text", "label": "Project Title", "required": True},
+        {"name": "status", "type": "select", "label": "Status",
+         "options": ["Active", "Draft", "Archived"]},
+        {"name": "notes", "type": "textarea", "label": "Notes"},
+    ],
+    method="POST",
+    action="/submit"
+)</code></pre>
+          </details>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────── TABLE -->
+      <section id="table">
+        <div class="section-card">
+          <div class="section-label">Component</div>
+          <h2 class="text-base font-semibold mb-4">Table</h2>
+          <div class="demo-wrap">
+            {{ c.table | safe }}
+          </div>
+          <details class="mcp-snippet mt-4">
+            <summary>Show MCP usage</summary>
+            <pre><code>create_table(
+    columns=[
+        {"name": "name",    "label": "Project",      "sortable": True},
+        {"name": "status",  "label": "Status",       "type": "badge", "sortable": False},
+        {"name": "updated", "label": "Last Updated", "sortable": True},
+    ],
+    features=["search", "sort", "pagination"],  # + "actions"
+    rows_per_page=10,
+    striped=True,
+    hoverable=True
+)
+
+# In your Flask route, pass: data=my_list, total_rows=len(my_list)</code></pre>
+          </details>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════ LANDING PAGE COMPONENTS -->
+      <div class="mt-12 mb-6">
+        <div class="flex items-center gap-3">
+          <div class="h-px flex-1 bg-base-300"></div>
+          <span class="text-xs font-semibold text-base-content/40 uppercase tracking-widest px-3">Landing Page Components</span>
+          <div class="h-px flex-1 bg-base-300"></div>
+        </div>
+        <p class="text-xs text-base-content/40 text-center mt-2">Full-section components for marketing / landing pages</p>
+      </div>
+
+      <!-- ─────────────────────────────────────────── HERO -->
+      <section id="hero">
+        <div class="section-card">
+          <div class="section-label">Landing Page Component</div>
+          <h2 class="text-base font-semibold mb-4">Hero</h2>
+          <div class="preview-frame" style="overflow: hidden; max-height: 400px;">
+            {{ c.hero | safe }}
+          </div>
+          <details class="mcp-snippet mt-4">
+            <summary>Show MCP usage</summary>
+            <pre><code>add_component(
+    component_type="hero",
+    config={
+        "title": "Build Amazing Products",
+        "subtitle": "The fastest way to create beautiful web applications.",
+        "cta_primary": "Get Started",
+        "cta_secondary": "Learn More"
+    }
+)</code></pre>
+          </details>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────── FEATURES -->
+      <section id="features">
+        <div class="section-card">
+          <div class="section-label">Landing Page Component</div>
+          <h2 class="text-base font-semibold mb-4">Features</h2>
+          <div class="preview-frame" style="overflow: hidden; max-height: 420px;">
+            {{ c.features | safe }}
+          </div>
+          <details class="mcp-snippet mt-4">
+            <summary>Show MCP usage</summary>
+            <pre><code>add_component(
+    component_type="features",
+    config={
+        "features": [
+            {"icon": "zap",    "title": "Lightning Fast", "description": "Optimized for speed."},
+            {"icon": "shield", "title": "Secure",         "description": "Security first."},
+            {"icon": "code",   "title": "Dev Friendly",   "description": "Clean APIs."},
+        ]
+    }
+)</code></pre>
+          </details>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────── TESTIMONIALS -->
+      <section id="testimonials">
+        <div class="section-card">
+          <div class="section-label">Landing Page Component</div>
+          <h2 class="text-base font-semibold mb-4">Testimonials</h2>
+          <div class="preview-frame" style="overflow: hidden; max-height: 440px;">
+            {{ c.testimonials | safe }}
+          </div>
+          <details class="mcp-snippet mt-4">
+            <summary>Show MCP usage</summary>
+            <pre><code>add_component(
+    component_type="testimonials",
+    config={
+        "testimonials": [
+            {
+                "name": "Sarah Johnson",
+                "role": "CEO",
+                "company": "TechCorp",
+                "quote": "This product has transformed how we work.",
+                "avatar": "SJ"
+            },
+            ...
+        ]
+    }
+)</code></pre>
+          </details>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────── PRICING -->
+      <section id="pricing">
+        <div class="section-card">
+          <div class="section-label">Landing Page Component</div>
+          <h2 class="text-base font-semibold mb-4">Pricing</h2>
+          <div class="preview-frame" style="overflow: hidden; max-height: 520px;">
+            {{ c.pricing | safe }}
+          </div>
+          <details class="mcp-snippet mt-4">
+            <summary>Show MCP usage</summary>
+            <pre><code>add_component(
+    component_type="pricing",
+    config={
+        "plans": [
+            {"name": "Basic",      "price": "$9",  "period": "per month", "popular": False,
+             "features": ["10 Projects", "5GB Storage"]},
+            {"name": "Pro",        "price": "$29", "period": "per month", "popular": True,
+             "features": ["Unlimited Projects", "50GB", "Priority Support"]},
+            {"name": "Enterprise", "price": "$99", "period": "per month", "popular": False,
+             "features": ["Everything", "Custom Integration", "SLA"]},
+        ]
+    }
+)</code></pre>
+          </details>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────── CTA -->
+      <section id="cta">
+        <div class="section-card">
+          <div class="section-label">Landing Page Component</div>
+          <h2 class="text-base font-semibold mb-4">CTA (Call to Action)</h2>
+          <div class="preview-frame" style="overflow: hidden; max-height: 280px;">
+            {{ c.cta | safe }}
+          </div>
+          <details class="mcp-snippet mt-4">
+            <summary>Show MCP usage</summary>
+            <pre><code>add_component(
+    component_type="cta",
+    config={
+        "title": "Ready to Get Started?",
+        "subtitle": "Join thousands of satisfied customers today.",
+        "button_text": "Start Free Trial"
+    }
+)</code></pre>
+          </details>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────── FOOTER -->
+      <section id="footer">
+        <div class="section-card">
+          <div class="section-label">Landing Page Component</div>
+          <h2 class="text-base font-semibold mb-4">Footer</h2>
+          <div class="preview-frame" style="overflow: hidden; max-height: 360px;">
+            {{ c.footer | safe }}
+          </div>
+          <details class="mcp-snippet mt-4">
+            <summary>Show MCP usage</summary>
+            <pre><code>add_component(
+    component_type="footer",
+    config={
+        "company_name": "Your Company",
+        "description": "Building amazing products since 2024."
+    }
+)</code></pre>
+          </details>
+        </div>
+      </section>
+
+      <!-- Bottom spacer -->
+      <div class="h-16"></div>
+    </main>
+  </div>
+
+</body>
+</html>
