@@ -1,0 +1,4 @@
+flask>=3.0.0
+
+# Local MCP server package (installs mcp, jinja2, rich, questionary, click)
+-e ../mcp-server
