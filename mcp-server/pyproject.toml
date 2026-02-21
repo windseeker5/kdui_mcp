@@ -2,7 +2,6 @@
 name = "kd-ui-mcp-server"
 version = "0.1.0"
 description = "MCP Server for generating beautiful Flask/Jinja2 templates with DaisyUI components"
-readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "mcp>=0.9.0",

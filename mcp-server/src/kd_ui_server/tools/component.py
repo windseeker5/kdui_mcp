@@ -106,9 +106,9 @@ def _generate_badge(config):
     
     variant_classes = {
         "default": "bg-blue-600 text-white hover:bg-blue-700",
-        "secondary": "bg-gray-100 text-gray-900 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-100",
+        "secondary": "bg-base-200 text-base-content hover:bg-base-300",
         "destructive": "bg-red-600 text-white hover:bg-red-700",
-        "outline": "border border-gray-300 text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800",
+        "outline": "border border-base-300 text-base-content hover:bg-base-200",
         "success": "bg-green-600 text-white hover:bg-green-700",
         "warning": "bg-amber-500 text-white hover:bg-amber-600"
     }
@@ -248,7 +248,7 @@ def _generate_sidebar(config):
         submenu = item.get("submenu", [])
         
         # Active state styling
-        active_class = "bg-gray-100 dark:bg-gray-800 text-blue-600 dark:text-blue-400" if active else "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+        active_class = "bg-base-200 text-primary" if active else "text-base-content hover:bg-base-200"
         
         # Badge HTML if present
         badge_html = ""
@@ -280,7 +280,7 @@ def _generate_sidebar(config):
                 sub_label = sub_item.get("label", "Submenu")
                 sub_url = sub_item.get("url", "#")
                 sub_active = sub_item.get("active", False)
-                sub_active_class = "text-blue-600 dark:text-blue-400 font-medium" if sub_active else "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+                sub_active_class = "text-primary font-medium" if sub_active else "text-base-content/60 hover:text-base-content"
                 
                 menu_items_html += f'''
         <a href="{sub_url}" class="block rounded-md px-3 py-2 text-sm {sub_active_class} transition-colors">
@@ -305,38 +305,38 @@ def _generate_sidebar(config):
     collapse_button = ""
     if collapsible:
         collapse_button = f'''
-    <button id="{sidebar_id}-toggle" class="absolute top-4 -right-3 z-10 flex h-6 w-6 items-center justify-center rounded-full border border-gray-200 bg-white shadow-md hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 transition-colors">
-      <i data-lucide="chevron-left" class="w-4 h-4 text-gray-600 dark:text-gray-300" id="{sidebar_id}-chevron"></i>
+    <button id="{sidebar_id}-toggle" class="absolute top-4 -right-3 z-10 flex h-6 w-6 items-center justify-center rounded-full border border-base-300 bg-base-100 shadow-md hover:bg-base-200 transition-colors">
+      <i data-lucide="chevron-left" class="w-4 h-4 text-base-content/60" id="{sidebar_id}-chevron"></i>
     </button>
 '''
     
     sidebar_html = f'''
 <!-- Enhanced Sidebar -->
-<aside id="{sidebar_id}" class="relative flex h-screen w-64 flex-col border-r border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-950 transition-all duration-300 ease-in-out">
+<aside id="{sidebar_id}" class="relative flex h-screen w-64 flex-col border-r border-base-300 bg-base-100 transition-all duration-300 ease-in-out">
   {collapse_button}
-  
+
   <!-- Brand -->
-  <div class="flex h-16 items-center gap-3 border-b border-gray-200 px-4 dark:border-gray-800">
+  <div class="flex h-16 items-center gap-3 border-b border-base-300 px-4">
     <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600">
       <i data-lucide="{brand_icon}" class="w-6 h-6 text-white"></i>
     </div>
-    <span class="sidebar-label text-lg font-semibold text-gray-900 dark:text-white">{brand}</span>
+    <span class="sidebar-label text-lg font-semibold text-base-content">{brand}</span>
   </div>
-  
+
   <!-- Navigation -->
   <nav class="flex-1 overflow-y-auto p-4">
     {menu_items_html}
   </nav>
-  
+
   <!-- Footer (optional user section) -->
-  <div class="border-t border-gray-200 p-4 dark:border-gray-800">
+  <div class="border-t border-base-300 p-4">
     <div class="flex items-center gap-3">
-      <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-gray-200 dark:bg-gray-800">
-        <i data-lucide="user" class="w-5 h-5 text-gray-600 dark:text-gray-400"></i>
+      <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-base-200">
+        <i data-lucide="user" class="w-5 h-5 text-base-content/60"></i>
       </div>
       <div class="sidebar-label flex-1 overflow-hidden">
-        <p class="text-sm font-medium text-gray-900 dark:text-white truncate">User Name</p>
-        <p class="text-xs text-gray-500 dark:text-gray-400 truncate">user@example.com</p>
+        <p class="text-sm font-medium text-base-content truncate">User Name</p>
+        <p class="text-xs text-base-content/50 truncate">user@example.com</p>
       </div>
     </div>
   </div>
@@ -433,7 +433,7 @@ def _generate_navigation_menu(config):
         subitems = item.get("items", [])
         
         # Active state styling
-        active_class = "text-blue-600 dark:text-blue-400 font-semibold" if active else "text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
+        active_class = "text-primary font-semibold" if active else "text-base-content hover:text-primary"
         
         # Icon HTML if present
         icon_html = f'<i data-lucide="{icon}" class="w-4 h-4"></i>' if icon and show_icons else ""
@@ -443,14 +443,14 @@ def _generate_navigation_menu(config):
             dropdown_id = f"nav-dropdown-{random.randint(1000, 9999)}"
             nav_items_html += f'''
       <div class="relative group">
-        <button id="{dropdown_id}-trigger" class="flex items-center gap-2 px-4 py-2 text-sm font-medium {active_class} transition-colors rounded-md hover:bg-gray-100 dark:hover:bg-gray-800">
+        <button id="{dropdown_id}-trigger" class="flex items-center gap-2 px-4 py-2 text-sm font-medium {active_class} transition-colors rounded-md hover:bg-base-200">
           {icon_html}
           <span>{label}</span>
           <i data-lucide="chevron-down" class="w-4 h-4 transition-transform group-hover:rotate-180"></i>
         </button>
         
         <!-- Dropdown Menu -->
-        <div id="{dropdown_id}-content" class="absolute left-0 top-full mt-2 w-56 origin-top-left rounded-md border border-gray-200 bg-white shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 dark:border-gray-700 dark:bg-gray-900 z-50">
+        <div id="{dropdown_id}-content" class="absolute left-0 top-full mt-2 w-56 origin-top-left rounded-md border border-base-300 bg-base-100 shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
           <div class="p-1">
 '''
             for subitem in subitems:
@@ -460,8 +460,8 @@ def _generate_navigation_menu(config):
                 sub_description = subitem.get("description", "")
                 sub_active = subitem.get("active", False)
                 
-                sub_active_class = "bg-gray-100 dark:bg-gray-800 text-blue-600 dark:text-blue-400" if sub_active else "hover:bg-gray-100 dark:hover:bg-gray-800"
-                sub_icon_html = f'<i data-lucide="{sub_icon}" class="w-4 h-4 text-gray-500"></i>' if sub_icon and show_icons else ""
+                sub_active_class = "bg-base-200 text-primary" if sub_active else "hover:bg-base-200"
+                sub_icon_html = f'<i data-lucide="{sub_icon}" class="w-4 h-4 text-base-content/50"></i>' if sub_icon and show_icons else ""
                 
                 if sub_description:
                     # Item with description
@@ -469,15 +469,15 @@ def _generate_navigation_menu(config):
             <a href="{sub_url}" class="flex items-start gap-3 rounded-md px-3 py-2 text-sm {sub_active_class} transition-colors">
               {sub_icon_html}
               <div class="flex-1">
-                <div class="font-medium text-gray-900 dark:text-white">{sub_label}</div>
-                <div class="text-xs text-gray-500 dark:text-gray-400">{sub_description}</div>
+                <div class="font-medium text-base-content">{sub_label}</div>
+                <div class="text-xs text-base-content/50">{sub_description}</div>
               </div>
             </a>
 '''
                 else:
                     # Simple item
                     nav_items_html += f'''
-            <a href="{sub_url}" class="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-gray-700 dark:text-gray-300 {sub_active_class} transition-colors">
+            <a href="{sub_url}" class="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-base-content {sub_active_class} transition-colors">
               {sub_icon_html}
               <span>{sub_label}</span>
             </a>
@@ -491,7 +491,7 @@ def _generate_navigation_menu(config):
         else:
             # Simple navigation link
             nav_items_html += f'''
-      <a href="{url}" class="flex items-center gap-2 px-4 py-2 text-sm font-medium {active_class} transition-colors rounded-md hover:bg-gray-100 dark:hover:bg-gray-800">
+      <a href="{url}" class="flex items-center gap-2 px-4 py-2 text-sm font-medium {active_class} transition-colors rounded-md hover:bg-base-200">
         {icon_html}
         <span>{label}</span>
       </a>
@@ -499,7 +499,7 @@ def _generate_navigation_menu(config):
     
     return f'''
 <!-- Shadcn-style Navigation Menu -->
-<nav id="{nav_id}" class="border-b border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-950">
+<nav id="{nav_id}" class="border-b border-base-300 bg-base-100">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <div class="flex h-16 items-center justify-between">
       <!-- Brand -->
@@ -507,7 +507,7 @@ def _generate_navigation_menu(config):
         <div class="flex h-8 w-8 items-center justify-center rounded-md bg-blue-600">
           <i data-lucide="{brand_icon}" class="w-5 h-5 text-white"></i>
         </div>
-        <span class="text-lg font-semibold text-gray-900 dark:text-white">{brand}</span>
+        <span class="text-lg font-semibold text-base-content">{brand}</span>
       </div>
       
       <!-- Navigation Items -->
@@ -516,14 +516,14 @@ def _generate_navigation_menu(config):
       </div>
       
       <!-- Mobile Menu Button -->
-      <button id="{nav_id}-mobile-toggle" class="md:hidden rounded-md p-2 text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800">
+      <button id="{nav_id}-mobile-toggle" class="md:hidden rounded-md p-2 text-base-content hover:bg-base-200">
         <i data-lucide="menu" class="w-6 h-6"></i>
       </button>
     </div>
   </div>
   
   <!-- Mobile Menu (hidden by default) -->
-  <div id="{nav_id}-mobile-menu" class="hidden md:hidden border-t border-gray-200 dark:border-gray-800">
+  <div id="{nav_id}-mobile-menu" class="hidden md:hidden border-t border-base-300">
     <div class="space-y-1 px-4 py-3">
       {nav_items_html.replace("relative group", "").replace("group-hover:opacity-100 group-hover:visible", "").replace("opacity-0 invisible", "hidden")}
     </div>
@@ -618,7 +618,7 @@ def _generate_progress(config):
     percentage = (value / max_value) * 100
     
     # Shadcn-inspired progress bar styling
-    container_classes = "relative h-2 w-full overflow-hidden rounded-full bg-gray-200 dark:bg-gray-800"
+    container_classes = "relative h-2 w-full overflow-hidden rounded-full bg-base-200"
     
     variant_classes = {
         "default": "bg-blue-600",
@@ -637,8 +637,8 @@ def _generate_progress(config):
     if show_label:
         progress_html = f'''<div class="space-y-2">
   <div class="flex items-center justify-between text-sm">
-    <span class="text-gray-700 dark:text-gray-300">Progress</span>
-    <span class="text-gray-700 dark:text-gray-300 font-medium">{int(percentage)}%</span>
+    <span class="text-base-content/70">Progress</span>
+    <span class="text-base-content/70 font-medium">{int(percentage)}%</span>
   </div>
   {progress_html}
 </div>'''
@@ -660,7 +660,7 @@ def _generate_skeleton(config):
     count = config.get("count", 1)  # Number of skeleton elements
     
     # Base skeleton classes with shimmer animation
-    base_classes = "animate-pulse bg-gray-200 dark:bg-gray-700"
+    base_classes = "animate-pulse bg-base-200"
     
     skeletons_html = ""
     
@@ -720,12 +720,12 @@ def _generate_typography(config):
         "h3": f'<h3 class="scroll-m-20 text-2xl font-semibold tracking-tight">{text}</h3>',
         "h4": f'<h4 class="scroll-m-20 text-xl font-semibold tracking-tight">{text}</h4>',
         "p": f'<p class="leading-7 [&:not(:first-child)]:mt-6">{text}</p>',
-        "lead": f'<p class="text-xl text-gray-700 dark:text-gray-300">{text}</p>',
+        "lead": f'<p class="text-xl text-base-content/70">{text}</p>',
         "large": f'<div class="text-lg font-semibold">{text}</div>',
         "small": f'<small class="text-sm font-medium leading-none">{text}</small>',
-        "muted": f'<p class="text-sm text-gray-500 dark:text-gray-400">{text}</p>',
-        "blockquote": f'<blockquote class="mt-6 border-l-2 border-gray-300 pl-6 italic text-gray-700 dark:text-gray-300">{text}</blockquote>',
-        "code": f'<code class="relative rounded bg-gray-100 dark:bg-gray-800 px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">{text}</code>',
+        "muted": f'<p class="text-sm text-base-content/50">{text}</p>',
+        "blockquote": f'<blockquote class="mt-6 border-l-2 border-base-300 pl-6 italic text-base-content/70">{text}</blockquote>',
+        "code": f'<code class="relative rounded bg-base-200 px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">{text}</code>',
     }
     
     # Handle lists separately
@@ -768,8 +768,8 @@ def _generate_dropdown_menu(config):
     
     # Button variant styles
     button_variants = {
-        "outline": "inline-flex items-center justify-center gap-2 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700",
-        "ghost": "inline-flex items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:text-gray-200 dark:hover:bg-gray-800",
+        "outline": "inline-flex items-center justify-center gap-2 rounded-md border border-base-300 bg-base-100 px-4 py-2 text-sm font-medium text-base-content shadow-sm hover:bg-base-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
+        "ghost": "inline-flex items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-medium text-base-content hover:bg-base-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
         "default": "inline-flex items-center justify-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
     }
     
@@ -792,14 +792,14 @@ def _generate_dropdown_menu(config):
             # Menu label (non-interactive)
             text = item.get("text", "Label")
             menu_items_html += f'''
-            <div class="px-2 py-1.5 text-xs font-semibold text-gray-500 dark:text-gray-400">
+            <div class="px-2 py-1.5 text-xs font-semibold text-base-content/50">
               {text}
             </div>'''
         
         elif item_type == "separator":
             # Separator
             menu_items_html += '''
-            <div class="my-1 h-px bg-gray-200 dark:bg-gray-700"></div>'''
+            <div class="my-1 h-px bg-base-300"></div>'''
         
         elif item_type == "item":
             # Menu item
@@ -811,15 +811,15 @@ def _generate_dropdown_menu(config):
             
             # Item styling based on variant
             if variant == "destructive":
-                item_class = "text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950"
+                item_class = "text-red-600 hover:bg-red-50"
             else:
-                item_class = "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
-            
+                item_class = "text-base-content hover:bg-base-200"
+
             if disabled:
-                item_class = "text-gray-400 dark:text-gray-600 cursor-not-allowed opacity-50"
-            
+                item_class = "text-base-content/30 cursor-not-allowed opacity-50"
+
             icon_html = f'<i data-lucide="{icon}" class="w-4 h-4"></i>' if icon else ""
-            shortcut_html = f'<span class="ml-auto text-xs text-gray-400">{shortcut}</span>' if shortcut else ""
+            shortcut_html = f'<span class="ml-auto text-xs text-base-content/40">{shortcut}</span>' if shortcut else ""
             
             menu_items_html += f'''
             <button class="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm {item_class} transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500" {"disabled" if disabled else ""}>
@@ -838,7 +838,7 @@ def _generate_dropdown_menu(config):
   </button>
   
   <!-- Dropdown Menu -->
-  <div id="{dropdown_id}-menu" class="absolute {align_class} z-50 mt-2 w-56 origin-top-right rounded-md border border-gray-200 bg-white p-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:border-gray-700 dark:bg-gray-900 hidden opacity-0 scale-95 transition-all duration-100" role="menu" aria-orientation="vertical">
+  <div id="{dropdown_id}-menu" class="absolute {align_class} z-50 mt-2 w-56 origin-top-right rounded-md border border-base-300 bg-base-100 p-1 shadow-lg focus:outline-none hidden opacity-0 scale-95 transition-all duration-100" role="menu" aria-orientation="vertical">
     {menu_items_html}
   </div>
 </div>
@@ -965,12 +965,12 @@ def _generate_hero(config):
     
     return f'''
 <!-- Hero Section -->
-<section class="bg-gradient-to-br from-blue-50 to-white py-20 px-4">
+<section class="bg-gradient-to-br from-primary/10 to-base-100 py-20 px-4">
   <div class="max-w-6xl mx-auto text-center">
-    <h1 class="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+    <h1 class="text-5xl md:text-6xl font-bold text-base-content mb-6">
       {title}
     </h1>
-    <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+    <p class="text-xl text-base-content/60 mb-8 max-w-2xl mx-auto">
       {subtitle}
     </p>
     <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -1010,11 +1010,11 @@ def _generate_features(config):
     
     features_html = '''
 <!-- Features Section -->
-<section class="py-20 px-4 bg-white">
+<section class="py-20 px-4 bg-base-100">
   <div class="max-w-6xl mx-auto">
     <div class="text-center mb-16">
-      <h2 class="text-4xl font-bold text-gray-900 mb-4">Features</h2>
-      <p class="text-xl text-gray-600">Everything you need to build amazing products</p>
+      <h2 class="text-4xl font-bold text-base-content mb-4">Features</h2>
+      <p class="text-xl text-base-content/60">Everything you need to build amazing products</p>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 '''
@@ -1025,12 +1025,12 @@ def _generate_features(config):
         description = feature.get("description", "Description")
         
         features_html += f'''
-      <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow duration-200">
+      <div class="bg-base-100 border border-base-300 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow duration-200">
         <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
           <i data-lucide="{icon}" class="w-6 h-6 text-blue-600"></i>
         </div>
-        <h3 class="text-xl font-semibold text-gray-900 mb-2">{title}</h3>
-        <p class="text-gray-600">{description}</p>
+        <h3 class="text-xl font-semibold text-base-content mb-2">{title}</h3>
+        <p class="text-base-content/60">{description}</p>
       </div>
 '''
     
@@ -1070,11 +1070,11 @@ def _generate_testimonials(config):
     
     testimonials_html = '''
 <!-- Testimonials Section -->
-<section class="py-20 px-4 bg-gray-50">
+<section class="py-20 px-4 bg-base-200">
   <div class="max-w-6xl mx-auto">
     <div class="text-center mb-16">
-      <h2 class="text-4xl font-bold text-gray-900 mb-4">What Our Customers Say</h2>
-      <p class="text-xl text-gray-600">Trusted by teams worldwide</p>
+      <h2 class="text-4xl font-bold text-base-content mb-4">What Our Customers Say</h2>
+      <p class="text-xl text-base-content/60">Trusted by teams worldwide</p>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 '''
@@ -1087,7 +1087,7 @@ def _generate_testimonials(config):
         avatar = testimonial.get("avatar", "XX")
         
         testimonials_html += f'''
-      <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+      <div class="bg-base-100 border border-base-300 rounded-lg p-6 shadow-sm">
         <div class="flex items-center gap-1 mb-4">
           <i data-lucide="star" class="w-4 h-4 fill-yellow-400 text-yellow-400"></i>
           <i data-lucide="star" class="w-4 h-4 fill-yellow-400 text-yellow-400"></i>
@@ -1095,14 +1095,14 @@ def _generate_testimonials(config):
           <i data-lucide="star" class="w-4 h-4 fill-yellow-400 text-yellow-400"></i>
           <i data-lucide="star" class="w-4 h-4 fill-yellow-400 text-yellow-400"></i>
         </div>
-        <p class="text-gray-700 mb-6 italic">"{quote}"</p>
+        <p class="text-base-content/70 mb-6 italic">"{quote}"</p>
         <div class="flex items-center gap-3">
           <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-semibold">
             {avatar}
           </div>
           <div>
-            <p class="font-semibold text-gray-900">{name}</p>
-            <p class="text-sm text-gray-600">{role} at {company}</p>
+            <p class="font-semibold text-base-content">{name}</p>
+            <p class="text-sm text-base-content/60">{role} at {company}</p>
           </div>
         </div>
       </div>
@@ -1144,11 +1144,11 @@ def _generate_pricing(config):
     
     pricing_html = '''
 <!-- Pricing Section -->
-<section class="py-20 px-4 bg-white">
+<section class="py-20 px-4 bg-base-100">
   <div class="max-w-6xl mx-auto">
     <div class="text-center mb-16">
-      <h2 class="text-4xl font-bold text-gray-900 mb-4">Simple, Transparent Pricing</h2>
-      <p class="text-xl text-gray-600">Choose the plan that's right for you</p>
+      <h2 class="text-4xl font-bold text-base-content mb-4">Simple, Transparent Pricing</h2>
+      <p class="text-xl text-base-content/60">Choose the plan that's right for you</p>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
 '''
@@ -1160,7 +1160,7 @@ def _generate_pricing(config):
         features = plan.get("features", [])
         popular = plan.get("popular", False)
         
-        border_class = "border-blue-600 shadow-lg" if popular else "border-gray-200"
+        border_class = "border-blue-600 shadow-lg" if popular else "border-base-300"
         badge = '''
         <div class="absolute -top-4 left-1/2 -translate-x-1/2">
           <span class="bg-blue-600 text-white px-4 py-1 rounded-full text-sm font-semibold">Popular</span>
@@ -1168,19 +1168,19 @@ def _generate_pricing(config):
 ''' if popular else ""
         
         pricing_html += f'''
-      <div class="relative bg-white border-2 {border_class} rounded-lg p-8 hover:shadow-xl transition-shadow duration-200">
+      <div class="relative bg-base-100 border-2 {border_class} rounded-lg p-8 hover:shadow-xl transition-shadow duration-200">
         {badge}
-        <h3 class="text-2xl font-bold text-gray-900 mb-2">{name}</h3>
+        <h3 class="text-2xl font-bold text-base-content mb-2">{name}</h3>
         <div class="mb-6">
-          <span class="text-4xl font-bold text-gray-900">{price}</span>
-          <span class="text-gray-600">/{period}</span>
+          <span class="text-4xl font-bold text-base-content">{price}</span>
+          <span class="text-base-content/60">/{period}</span>
         </div>
         <ul class="space-y-3 mb-8">
 '''
         
         for feature in features:
             pricing_html += f'''
-          <li class="flex items-center gap-2 text-gray-700">
+          <li class="flex items-center gap-2 text-base-content/80">
             <i data-lucide="check" class="w-5 h-5 text-green-600"></i>
             <span>{feature}</span>
           </li>
@@ -1217,7 +1217,7 @@ def _generate_cta(config):
     <p class="text-xl text-blue-100 mb-8">
       {subtitle}
     </p>
-    <button class="btn btn-lg bg-white text-blue-600 hover:bg-gray-100 border-0 gap-2">
+    <button class="btn btn-lg bg-white text-blue-700 hover:bg-blue-50 border-0 gap-2">
       <i data-lucide="arrow-right" class="w-5 h-5"></i>
       {button_text}
     </button>
@@ -1233,21 +1233,21 @@ def _generate_footer(config):
     
     return f'''
 <!-- Footer -->
-<footer class="bg-gray-900 text-gray-300 py-12 px-4">
+<footer class="bg-neutral text-neutral-content py-12 px-4">
   <div class="max-w-6xl mx-auto">
     <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
       <!-- Company Info -->
       <div class="col-span-1 md:col-span-2">
-        <h3 class="text-2xl font-bold text-white mb-3">{company_name}</h3>
-        <p class="text-gray-400 mb-4">{description}</p>
-        <div class="flex gap-4">
-          <a href="#" class="hover:text-white transition-colors">
+        <h3 class="text-2xl font-bold mb-3">{company_name}</h3>
+        <p class="opacity-70 mb-4">{description}</p>
+        <div class="flex gap-4 opacity-70">
+          <a href="#" class="hover:opacity-100 transition-opacity">
             <i data-lucide="twitter" class="w-5 h-5"></i>
           </a>
-          <a href="#" class="hover:text-white transition-colors">
+          <a href="#" class="hover:opacity-100 transition-opacity">
             <i data-lucide="github" class="w-5 h-5"></i>
           </a>
-          <a href="#" class="hover:text-white transition-colors">
+          <a href="#" class="hover:opacity-100 transition-opacity">
             <i data-lucide="linkedin" class="w-5 h-5"></i>
           </a>
         </div>
@@ -1255,27 +1255,27 @@ def _generate_footer(config):
       
       <!-- Product Links -->
       <div>
-        <h4 class="text-white font-semibold mb-3">Product</h4>
-        <ul class="space-y-2">
-          <li><a href="#" class="hover:text-white transition-colors">Features</a></li>
-          <li><a href="#" class="hover:text-white transition-colors">Pricing</a></li>
-          <li><a href="#" class="hover:text-white transition-colors">Documentation</a></li>
+        <h4 class="font-semibold mb-3">Product</h4>
+        <ul class="space-y-2 opacity-70">
+          <li><a href="#" class="hover:opacity-100 transition-opacity">Features</a></li>
+          <li><a href="#" class="hover:opacity-100 transition-opacity">Pricing</a></li>
+          <li><a href="#" class="hover:opacity-100 transition-opacity">Documentation</a></li>
         </ul>
       </div>
-      
+
       <!-- Company Links -->
       <div>
-        <h4 class="text-white font-semibold mb-3">Company</h4>
-        <ul class="space-y-2">
-          <li><a href="#" class="hover:text-white transition-colors">About</a></li>
-          <li><a href="#" class="hover:text-white transition-colors">Blog</a></li>
-          <li><a href="#" class="hover:text-white transition-colors">Contact</a></li>
+        <h4 class="font-semibold mb-3">Company</h4>
+        <ul class="space-y-2 opacity-70">
+          <li><a href="#" class="hover:opacity-100 transition-opacity">About</a></li>
+          <li><a href="#" class="hover:opacity-100 transition-opacity">Blog</a></li>
+          <li><a href="#" class="hover:opacity-100 transition-opacity">Contact</a></li>
         </ul>
       </div>
     </div>
-    
+
     <!-- Copyright -->
-    <div class="border-t border-gray-800 pt-8 text-center text-gray-400">
+    <div class="border-t border-neutral-content/20 pt-8 text-center opacity-60">
       <p>&copy; 2024 {company_name}. All rights reserved.</p>
     </div>
   </div>

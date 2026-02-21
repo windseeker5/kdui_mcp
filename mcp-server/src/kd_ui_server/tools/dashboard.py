@@ -81,12 +81,12 @@ def _generate_sidebar_layout(title, components, theme):
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
         {% if stats %}
           {% for stat in stats %}
-          <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+          <div class="bg-base-100 border border-base-300 rounded-lg p-6 shadow-sm">
             <div class="flex items-center justify-between mb-1">
-              <p class="text-sm text-gray-600">{{ stat.title }}</p>
+              <p class="text-sm text-base-content/60">{{ stat.title }}</p>
               <i data-lucide="{{ stat.icon }}" class="w-5 h-5 text-blue-600"></i>
             </div>
-            <p class="text-2xl font-bold text-gray-900">{{ stat.value }}</p>
+            <p class="text-2xl font-bold text-base-content">{{ stat.value }}</p>
             <p class="text-xs text-{{ stat.trend_color }}-600 flex items-center gap-1 mt-2">
               <i data-lucide="{{ stat.trend_icon }}" class="w-3 h-3"></i>
               <span>{{ stat.description }}</span>
@@ -94,45 +94,45 @@ def _generate_sidebar_layout(title, components, theme):
           </div>
           {% endfor %}
         {% else %}
-          <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+          <div class="bg-base-100 border border-base-300 rounded-lg p-6 shadow-sm">
             <div class="flex items-center justify-between mb-1">
-              <p class="text-sm text-gray-600">Total Revenue</p>
+              <p class="text-sm text-base-content/60">Total Revenue</p>
               <i data-lucide="dollar-sign" class="w-5 h-5 text-blue-600"></i>
             </div>
-            <p class="text-2xl font-bold text-gray-900">$45,231</p>
+            <p class="text-2xl font-bold text-base-content">$45,231</p>
             <p class="text-xs text-green-600 flex items-center gap-1 mt-2">
               <i data-lucide="trending-up" class="w-3 h-3"></i>
               <span>+20.1% from last month</span>
             </p>
           </div>
-          <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+          <div class="bg-base-100 border border-base-300 rounded-lg p-6 shadow-sm">
             <div class="flex items-center justify-between mb-1">
-              <p class="text-sm text-gray-600">New Users</p>
+              <p class="text-sm text-base-content/60">New Users</p>
               <i data-lucide="users" class="w-5 h-5 text-blue-600"></i>
             </div>
-            <p class="text-2xl font-bold text-gray-900">1,234</p>
+            <p class="text-2xl font-bold text-base-content">1,234</p>
             <p class="text-xs text-green-600 flex items-center gap-1 mt-2">
               <i data-lucide="trending-up" class="w-3 h-3"></i>
               <span>+12.5% from last month</span>
             </p>
           </div>
-          <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+          <div class="bg-base-100 border border-base-300 rounded-lg p-6 shadow-sm">
             <div class="flex items-center justify-between mb-1">
-              <p class="text-sm text-gray-600">Active Sessions</p>
+              <p class="text-sm text-base-content/60">Active Sessions</p>
               <i data-lucide="activity" class="w-5 h-5 text-blue-600"></i>
             </div>
-            <p class="text-2xl font-bold text-gray-900">567</p>
+            <p class="text-2xl font-bold text-base-content">567</p>
             <p class="text-xs text-red-600 flex items-center gap-1 mt-2">
               <i data-lucide="trending-down" class="w-3 h-3"></i>
               <span>-5.2% from last month</span>
             </p>
           </div>
-          <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+          <div class="bg-base-100 border border-base-300 rounded-lg p-6 shadow-sm">
             <div class="flex items-center justify-between mb-1">
-              <p class="text-sm text-gray-600">Conversion Rate</p>
+              <p class="text-sm text-base-content/60">Conversion Rate</p>
               <i data-lucide="percent" class="w-5 h-5 text-blue-600"></i>
             </div>
-            <p class="text-2xl font-bold text-gray-900">3.2%</p>
+            <p class="text-2xl font-bold text-base-content">3.2%</p>
             <p class="text-xs text-green-600 flex items-center gap-1 mt-2">
               <i data-lucide="trending-up" class="w-3 h-3"></i>
               <span>+0.3% from last month</span>
@@ -146,15 +146,15 @@ def _generate_sidebar_layout(title, components, theme):
         layout += '''
       <!-- Charts -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
-          <h3 class="text-base font-semibold text-gray-900 mb-4 flex items-center gap-2">
+        <div class="bg-base-100 border border-base-300 rounded-lg p-6 shadow-sm">
+          <h3 class="text-base font-semibold text-base-content mb-4 flex items-center gap-2">
             <i data-lucide="line-chart" class="w-5 h-5 text-blue-600"></i>
             <span>Revenue Trend</span>
           </h3>
           <canvas id="revenueChart"></canvas>
         </div>
-        <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
-          <h3 class="text-base font-semibold text-gray-900 mb-4 flex items-center gap-2">
+        <div class="bg-base-100 border border-base-300 rounded-lg p-6 shadow-sm">
+          <h3 class="text-base font-semibold text-base-content mb-4 flex items-center gap-2">
             <i data-lucide="bar-chart-3" class="w-5 h-5 text-blue-600"></i>
             <span>User Growth</span>
           </h3>
@@ -166,59 +166,59 @@ def _generate_sidebar_layout(title, components, theme):
     if "table" in components:
         layout += '''
       <!-- Data Table -->
-      <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
-        <h3 class="text-base font-semibold text-gray-900 mb-4">Recent Orders</h3>
+      <div class="bg-base-100 border border-base-300 rounded-lg p-6 shadow-sm">
+        <h3 class="text-base font-semibold text-base-content mb-4">Recent Orders</h3>
         <div class="overflow-x-auto">
           <table class="w-full">
             <thead>
-              <tr class="border-b border-gray-200 bg-gray-50">
-                <th class="py-3 px-4 text-left text-sm font-medium text-gray-700">Order ID</th>
-                <th class="py-3 px-4 text-left text-sm font-medium text-gray-700">Customer</th>
-                <th class="py-3 px-4 text-left text-sm font-medium text-gray-700">Amount</th>
-                <th class="py-3 px-4 text-left text-sm font-medium text-gray-700">Status</th>
-                <th class="py-3 px-4 text-left text-sm font-medium text-gray-700">Date</th>
+              <tr class="border-b border-base-300 bg-base-200">
+                <th class="py-3 px-4 text-left text-sm font-medium text-base-content/70">Order ID</th>
+                <th class="py-3 px-4 text-left text-sm font-medium text-base-content/70">Customer</th>
+                <th class="py-3 px-4 text-left text-sm font-medium text-base-content/70">Amount</th>
+                <th class="py-3 px-4 text-left text-sm font-medium text-base-content/70">Status</th>
+                <th class="py-3 px-4 text-left text-sm font-medium text-base-content/70">Date</th>
               </tr>
             </thead>
             <tbody>
               {% if transactions %}
                 {% for transaction in transactions %}
-                <tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors duration-200">
-                  <td class="py-4 px-4 text-sm text-gray-900">{{ transaction.id }}</td>
-                  <td class="py-4 px-4 text-sm text-gray-900">{{ transaction.name }}</td>
-                  <td class="py-4 px-4 text-sm text-gray-900">${{ transaction.amount }}</td>
+                <tr class="border-b border-base-300 hover:bg-base-200 transition-colors duration-200">
+                  <td class="py-4 px-4 text-sm text-base-content">{{ transaction.id }}</td>
+                  <td class="py-4 px-4 text-sm text-base-content">{{ transaction.name }}</td>
+                  <td class="py-4 px-4 text-sm text-base-content">${{ transaction.amount }}</td>
                   <td class="py-4 px-4 text-sm">
                     <span class="px-2 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-md">{{ transaction.status }}</span>
                   </td>
-                  <td class="py-4 px-4 text-sm text-gray-600">{{ transaction.date }}</td>
+                  <td class="py-4 px-4 text-sm text-base-content/60">{{ transaction.date }}</td>
                 </tr>
                 {% endfor %}
               {% else %}
-                <tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors duration-200">
-                  <td class="py-4 px-4 text-sm text-gray-900">#12345</td>
-                  <td class="py-4 px-4 text-sm text-gray-900">John Doe</td>
-                  <td class="py-4 px-4 text-sm text-gray-900">$234.50</td>
+                <tr class="border-b border-base-300 hover:bg-base-200 transition-colors duration-200">
+                  <td class="py-4 px-4 text-sm text-base-content">#12345</td>
+                  <td class="py-4 px-4 text-sm text-base-content">John Doe</td>
+                  <td class="py-4 px-4 text-sm text-base-content">$234.50</td>
                   <td class="py-4 px-4 text-sm">
                     <span class="px-2 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-md">Completed</span>
                   </td>
-                  <td class="py-4 px-4 text-sm text-gray-600">2024-02-10</td>
+                  <td class="py-4 px-4 text-sm text-base-content/60">2024-02-10</td>
                 </tr>
-                <tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors duration-200">
-                  <td class="py-4 px-4 text-sm text-gray-900">#12346</td>
-                  <td class="py-4 px-4 text-sm text-gray-900">Jane Smith</td>
-                  <td class="py-4 px-4 text-sm text-gray-900">$589.00</td>
+                <tr class="border-b border-base-300 hover:bg-base-200 transition-colors duration-200">
+                  <td class="py-4 px-4 text-sm text-base-content">#12346</td>
+                  <td class="py-4 px-4 text-sm text-base-content">Jane Smith</td>
+                  <td class="py-4 px-4 text-sm text-base-content">$589.00</td>
                   <td class="py-4 px-4 text-sm">
                     <span class="px-2 py-1 text-xs font-medium text-yellow-700 bg-yellow-100 rounded-md">Processing</span>
                   </td>
-                  <td class="py-4 px-4 text-sm text-gray-600">2024-02-10</td>
+                  <td class="py-4 px-4 text-sm text-base-content/60">2024-02-10</td>
                 </tr>
-                <tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors duration-200">
-                  <td class="py-4 px-4 text-sm text-gray-900">#12347</td>
-                  <td class="py-4 px-4 text-sm text-gray-900">Bob Johnson</td>
-                  <td class="py-4 px-4 text-sm text-gray-900">$123.99</td>
+                <tr class="border-b border-base-300 hover:bg-base-200 transition-colors duration-200">
+                  <td class="py-4 px-4 text-sm text-base-content">#12347</td>
+                  <td class="py-4 px-4 text-sm text-base-content">Bob Johnson</td>
+                  <td class="py-4 px-4 text-sm text-base-content">$123.99</td>
                   <td class="py-4 px-4 text-sm">
                     <span class="px-2 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-md">Completed</span>
                   </td>
-                  <td class="py-4 px-4 text-sm text-gray-600">2024-02-09</td>
+                  <td class="py-4 px-4 text-sm text-base-content/60">2024-02-09</td>
                 </tr>
               {% endif %}
             </tbody>
@@ -234,23 +234,23 @@ def _generate_sidebar_layout(title, components, theme):
   <!-- Sidebar -->
   <div class="drawer-side">
     <label for="main-drawer" class="drawer-overlay"></label>
-    <aside class="w-60 min-h-full bg-gray-50 border-r border-gray-200">
+    <aside class="w-60 min-h-full bg-base-200 border-r border-base-300">
       <div class="p-4">
-        <h2 class="text-xl font-bold text-gray-900 mb-6">''' + title + '''</h2>
+        <h2 class="text-xl font-bold text-base-content mb-6">''' + title + '''</h2>
         <nav class="space-y-1">
-          <a href="/dashboard" class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-blue-700 bg-blue-50 rounded-md transition-colors duration-200">
+          <a href="/dashboard" class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-primary bg-primary/10 rounded-md transition-colors duration-200">
             <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
             <span>Dashboard</span>
           </a>
-          <a href="/analytics" class="flex items-center gap-3 px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md transition-colors duration-200">
+          <a href="/analytics" class="flex items-center gap-3 px-3 py-2 text-sm text-base-content/70 hover:bg-base-300 rounded-md transition-colors duration-200">
             <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
             <span>Analytics</span>
           </a>
-          <a href="/users" class="flex items-center gap-3 px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md transition-colors duration-200">
+          <a href="/users" class="flex items-center gap-3 px-3 py-2 text-sm text-base-content/70 hover:bg-base-300 rounded-md transition-colors duration-200">
             <i data-lucide="users" class="w-5 h-5"></i>
             <span>Users</span>
           </a>
-          <a href="/settings" class="flex items-center gap-3 px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md transition-colors duration-200">
+          <a href="/settings" class="flex items-center gap-3 px-3 py-2 text-sm text-base-content/70 hover:bg-base-300 rounded-md transition-colors duration-200">
             <i data-lucide="settings" class="w-5 h-5"></i>
             <span>Settings</span>
           </a>
