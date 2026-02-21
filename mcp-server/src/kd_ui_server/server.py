@@ -212,7 +212,7 @@ async def list_tools() -> list[Tool]:
         Tool(
             name="add_component",
             description="""Add individual UI components to your Flask templates.
-            
+
             Available components:
             - stat_card: Metric display card with value, title, and trend
             - alert: Information, success, warning, or error messages
@@ -222,15 +222,28 @@ async def list_tools() -> list[Tool]:
             - modal: Dialog/popup overlay
             - navbar: Top navigation bar
             - sidebar: Side navigation menu
+            - navigation_menu: Navigation menu component
             - breadcrumb: Navigation breadcrumb trail
             - tabs: Tabbed content sections
             - progress: Progress bars and loading indicators
+            - skeleton: Loading skeleton placeholders
+            - typography: Typography and text components
+            - dropdown_menu: Dropdown menu with items, icons, separators, and variants
             - chart_container: Container for Chart.js charts
-            
+            - theme_toggle: Light/dark theme toggle button
+
+            Landing page sections:
+            - hero: Hero/banner section
+            - features: Features showcase section
+            - testimonials: Testimonials/reviews section
+            - pricing: Pricing plans section
+            - cta: Call-to-action section
+            - footer: Page footer section
+
             Parameters:
             - component_type: Type of component to generate
             - config: Component-specific configuration
-            
+
             Returns: Component template snippet
             """,
             inputSchema={
@@ -240,8 +253,11 @@ async def list_tools() -> list[Tool]:
                         "type": "string",
                         "enum": [
                             "stat_card", "alert", "badge", "button", "card",
-                            "modal", "navbar", "sidebar", "breadcrumb", "tabs",
-                            "progress", "chart_container"
+                            "modal", "navbar", "sidebar", "navigation_menu",
+                            "breadcrumb", "tabs", "progress", "skeleton",
+                            "typography", "dropdown_menu", "chart_container",
+                            "theme_toggle", "hero", "features", "testimonials",
+                            "pricing", "cta", "footer"
                         ],
                         "description": "Type of component to generate"
                     },

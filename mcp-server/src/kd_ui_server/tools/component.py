@@ -741,18 +741,22 @@ def _generate_typography(config):
 
 
 def _generate_dropdown_menu(config):
-    """Generate a Shadcn-style dropdown menu component.
-    
+    """Generate a dropdown menu component.
+
+    The menu is rendered at document.body level with position:fixed so it
+    escapes any overflow container, stacking context, or scroll wrapper —
+    works correctly inside tables, modals, sidebars, and drawers.
+
     Features:
-    - User profile menus
-    - Action dropdowns
-    - Context menus
-    - Theme-aware styling
-    - Smooth animations
+    - position:fixed via getBoundingClientRect() — never clipped
+    - Auto-flips upward when near the bottom of the viewport
+    - whitespace-nowrap on all items — no unexpected line wraps
+    - DaisyUI-compatible color tokens (text-error, bg-base-200, etc.)
+    - Closes on click-outside, Escape key, and window scroll
     """
     trigger_text = config.get("trigger_text", "Open Menu")
     trigger_icon = config.get("trigger_icon", "chevron-down")
-    trigger_variant = config.get("trigger_variant", "outline")  # outline, ghost, default
+    trigger_variant = config.get("trigger_variant", "outline")  # outline | ghost | default
     items = config.get("items", [
         {"type": "label", "text": "My Account"},
         {"type": "item", "icon": "user", "text": "Profile", "shortcut": "⇧⌘P"},
@@ -760,154 +764,123 @@ def _generate_dropdown_menu(config):
         {"type": "separator"},
         {"type": "item", "icon": "log-out", "text": "Log out", "variant": "destructive"}
     ])
-    align = config.get("align", "end")  # start, center, end
-    
-    # Generate unique ID for this dropdown
+    align = config.get("align", "end")  # start | center | end
+    menu_width = config.get("width", 220)  # px
+
     import random
     dropdown_id = f"dropdown-{random.randint(1000, 9999)}"
-    
-    # Button variant styles
+
+    # Trigger button styles
     button_variants = {
-        "outline": "inline-flex items-center justify-center gap-2 rounded-md border border-base-300 bg-base-100 px-4 py-2 text-sm font-medium text-base-content shadow-sm hover:bg-base-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
-        "ghost": "inline-flex items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-medium text-base-content hover:bg-base-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
-        "default": "inline-flex items-center justify-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        "outline": "inline-flex items-center justify-center gap-2 rounded-md border border-base-300 bg-base-100 px-4 py-2 text-sm font-medium text-base-content shadow-sm hover:bg-base-200 focus:outline-none",
+        "ghost":   "inline-flex items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-medium text-base-content hover:bg-base-200 focus:outline-none",
+        "default": "inline-flex items-center justify-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-content shadow-sm hover:opacity-90 focus:outline-none",
     }
-    
     button_class = button_variants.get(trigger_variant, button_variants["outline"])
-    
-    # Alignment classes
-    align_classes = {
-        "start": "left-0",
-        "center": "left-1/2 -translate-x-1/2",
-        "end": "right-0"
-    }
-    align_class = align_classes.get(align, align_classes["end"])
-    
-    # Build menu items
+
+    # Horizontal alignment JS expression (evaluated at open time)
+    align_js = {
+        "start":  "rect.left",
+        "center": "rect.left + rect.width / 2 - menuWidth / 2",
+        "end":    "rect.right - menuWidth",
+    }.get(align, "rect.right - menuWidth")
+
+    # Build menu items HTML
     menu_items_html = ""
     for item in items:
         item_type = item.get("type", "item")
-        
+
         if item_type == "label":
-            # Menu label (non-interactive)
             text = item.get("text", "Label")
-            menu_items_html += f'''
-            <div class="px-2 py-1.5 text-xs font-semibold text-base-content/50">
-              {text}
-            </div>'''
-        
+            menu_items_html += f'<div class="px-2 py-1.5 text-xs font-semibold text-base-content/50 whitespace-nowrap">{text}</div>\n'
+
         elif item_type == "separator":
-            # Separator
-            menu_items_html += '''
-            <div class="my-1 h-px bg-base-300"></div>'''
-        
+            menu_items_html += '<div class="my-1 h-px bg-base-300"></div>\n'
+
         elif item_type == "item":
-            # Menu item
-            icon = item.get("icon", "")
-            text = item.get("text", "Item")
+            icon     = item.get("icon", "")
+            text     = item.get("text", "Item")
             shortcut = item.get("shortcut", "")
-            variant = item.get("variant", "default")
+            variant  = item.get("variant", "default")
             disabled = item.get("disabled", False)
-            
-            # Item styling based on variant
-            if variant == "destructive":
-                item_class = "text-red-600 hover:bg-red-50"
-            else:
-                item_class = "text-base-content hover:bg-base-200"
 
             if disabled:
                 item_class = "text-base-content/30 cursor-not-allowed opacity-50"
+            elif variant == "destructive":
+                item_class = "text-error hover:bg-error/10"
+            else:
+                item_class = "text-base-content hover:bg-base-200"
 
-            icon_html = f'<i data-lucide="{icon}" class="w-4 h-4"></i>' if icon else ""
-            shortcut_html = f'<span class="ml-auto text-xs text-base-content/40">{shortcut}</span>' if shortcut else ""
-            
-            menu_items_html += f'''
-            <button class="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm {item_class} transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500" {"disabled" if disabled else ""}>
-              {icon_html}
-              <span>{text}</span>
-              {shortcut_html}
-            </button>'''
-    
-    return f'''
-<!-- Dropdown Menu -->
-<div class="relative inline-block text-left">
-  <!-- Trigger Button -->
+            icon_html     = f'<i data-lucide="{icon}" class="w-4 h-4 flex-shrink-0"></i>' if icon else ""
+            shortcut_html = f'<span class="ml-auto text-xs text-base-content/40 pl-4 whitespace-nowrap">{shortcut}</span>' if shortcut else ""
+            disabled_attr = "disabled" if disabled else ""
+
+            menu_items_html += (
+                f'<button class="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm '
+                f'{item_class} transition-colors focus:outline-none whitespace-nowrap" {disabled_attr}>'
+                f'{icon_html}<span>{text}</span>{shortcut_html}</button>\n'
+            )
+
+    return f'''<!-- Dropdown Menu -->
+<div class="inline-block">
   <button id="{dropdown_id}-trigger" class="{button_class}" aria-expanded="false" aria-haspopup="true">
     <span>{trigger_text}</span>
     <i data-lucide="{trigger_icon}" class="w-4 h-4"></i>
   </button>
-  
-  <!-- Dropdown Menu -->
-  <div id="{dropdown_id}-menu" class="absolute {align_class} z-50 mt-2 w-56 origin-top-right rounded-md border border-base-300 bg-base-100 p-1 shadow-lg focus:outline-none hidden opacity-0 scale-95 transition-all duration-100" role="menu" aria-orientation="vertical">
-    {menu_items_html}
-  </div>
 </div>
 
 <script>
 (function() {{
   const trigger = document.getElementById('{dropdown_id}-trigger');
-  const menu = document.getElementById('{dropdown_id}-menu');
-  
-  if (trigger && menu) {{
-    // Toggle dropdown
-    trigger.addEventListener('click', function(e) {{
-      e.stopPropagation();
-      const isHidden = menu.classList.contains('hidden');
-      
-      // Close all other dropdowns
-      document.querySelectorAll('[id$="-menu"]').forEach(m => {{
-        m.classList.add('hidden', 'opacity-0', 'scale-95');
-        m.classList.remove('opacity-100', 'scale-100');
-      }});
-      
-      if (isHidden) {{
-        // Open this dropdown
-        menu.classList.remove('hidden');
-        setTimeout(() => {{
-          menu.classList.remove('opacity-0', 'scale-95');
-          menu.classList.add('opacity-100', 'scale-100');
-        }}, 10);
-        trigger.setAttribute('aria-expanded', 'true');
-      }} else {{
-        // Close this dropdown
-        menu.classList.add('opacity-0', 'scale-95');
-        menu.classList.remove('opacity-100', 'scale-100');
-        setTimeout(() => {{
-          menu.classList.add('hidden');
-        }}, 100);
-        trigger.setAttribute('aria-expanded', 'false');
-      }}
-    }});
-    
-    // Close on click outside
-    document.addEventListener('click', function(e) {{
-      if (!trigger.contains(e.target) && !menu.contains(e.target)) {{
-        menu.classList.add('opacity-0', 'scale-95');
-        menu.classList.remove('opacity-100', 'scale-100');
-        setTimeout(() => {{
-          menu.classList.add('hidden');
-        }}, 100);
-        trigger.setAttribute('aria-expanded', 'false');
-      }}
-    }});
-    
-    // Close on Escape key
-    document.addEventListener('keydown', function(e) {{
-      if (e.key === 'Escape' && !menu.classList.contains('hidden')) {{
-        menu.classList.add('opacity-0', 'scale-95');
-        menu.classList.remove('opacity-100', 'scale-100');
-        setTimeout(() => {{
-          menu.classList.add('hidden');
-        }}, 100);
-        trigger.setAttribute('aria-expanded', 'false');
-      }}
-    }});
-    
-    // Initialize Lucide icons
-    if (typeof lucide !== 'undefined') {{
-      lucide.createIcons();
-    }}
+  if (!trigger) return;
+
+  const menuWidth = {menu_width};
+
+  // Render menu at body level — escapes all overflow/stacking contexts
+  const menu = document.createElement('div');
+  menu.id = '{dropdown_id}-menu';
+  menu.style.cssText = 'position:fixed;z-index:9999;display:none;width:' + menuWidth + 'px;';
+  menu.className = 'rounded-md border border-base-300 bg-base-100 p-1 shadow-lg';
+  menu.setAttribute('role', 'menu');
+  menu.innerHTML = `{menu_items_html}`;
+  document.body.appendChild(menu);
+
+  let isOpen = false;
+
+  function openMenu() {{
+    const rect      = trigger.getBoundingClientRect();
+    const menuH     = menu.scrollHeight || 120;
+    const spaceBelow = window.innerHeight - rect.bottom;
+    const top  = spaceBelow > menuH + 8 ? rect.bottom + 4 : rect.top - menuH - 4;
+    const left = Math.max(8, Math.min({align_js}, window.innerWidth - menuWidth - 8));
+    menu.style.top     = top + 'px';
+    menu.style.left    = left + 'px';
+    menu.style.display = 'block';
+    trigger.setAttribute('aria-expanded', 'true');
+    isOpen = true;
+    if (typeof lucide !== 'undefined') lucide.createIcons();
   }}
+
+  function closeMenu() {{
+    menu.style.display = 'none';
+    trigger.setAttribute('aria-expanded', 'false');
+    isOpen = false;
+  }}
+
+  trigger.addEventListener('click', function() {{
+    isOpen ? closeMenu() : openMenu();
+  }});
+
+  document.addEventListener('click', function(e) {{
+    if (!trigger.contains(e.target) && !menu.contains(e.target)) closeMenu();
+  }});
+
+  document.addEventListener('keydown', function(e) {{
+    if (e.key === 'Escape') closeMenu();
+  }});
+
+  // Close on page scroll (not inner element scroll)
+  window.addEventListener('scroll', closeMenu);
 }})();
 </script>
 '''
