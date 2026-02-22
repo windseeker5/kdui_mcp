@@ -1,0 +1,9 @@
+- generic [ref=e2]:
+  - img [ref=e3]
+  - generic [ref=e5]: You are opening a CodeSandbox preview, do you want to continue?
+  - generic [ref=e6]: https://4mrnhq.csb.app/
+  - generic [ref=e7]:
+    - link "Yes, proceed to preview" [ref=e8] [cursor=pointer]:
+      - /url: "#"
+    - link "No, I don't trust this url" [ref=e9] [cursor=pointer]:
+      - /url: /__csb_trust_prompt_reject?previewUrl=https%3A%2F%2F4mrnhq.csb.app%2F

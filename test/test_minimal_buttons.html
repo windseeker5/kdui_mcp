@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minimal Button Test</title>
+
+  <!-- ONLY Oat CSS - no Tailwind -->
+  <link rel="stylesheet" href="https://unpkg.com/@knadh/oat/oat.min.css">
+
+  <style>
+    body {
+      padding: 2rem;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+    .test-section {
+      margin-bottom: 2rem;
+      padding: 1rem;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+  <h1>Minimal Button Test (Oat CSS Only)</h1>
+
+  <div class="test-section">
+    <h3>Basic Buttons</h3>
+    <button>Primary</button>
+    <button data-variant="secondary">Secondary</button>
+    <button data-variant="danger">Danger</button>
+    <button class="outline">Outline</button>
+    <button class="ghost">Ghost</button>
+    <button disabled>Disabled</button>
+  </div>
+
+  <div class="test-section">
+    <h3>Sizes</h3>
+    <button class="small">Small</button>
+    <button>Default</button>
+    <button class="large">Large</button>
+  </div>
+
+  <div class="test-section">
+    <h3>Combinations</h3>
+    <button data-variant="secondary" class="small">Secondary Small</button>
+    <button data-variant="danger" class="outline large">Danger Outline Large</button>
+  </div>
+</body>
+</html>

@@ -1,0 +1,318 @@
+- generic [active] [ref=e1]:
+  - button "Skip to content" [ref=e2] [cursor=pointer]
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - link "Pico CSS homepage" [ref=e5] [cursor=pointer]:
+        - /url: /
+        - img [ref=e6]
+      - navigation [ref=e11]:
+        - list [ref=e12]:
+          - listitem [ref=e13]:
+            - group [ref=e14]:
+              - generic "v2.1.1" [ref=e15] [cursor=pointer]
+          - listitem [ref=e16]:
+            - link "Examples" [ref=e17] [cursor=pointer]:
+              - /url: /examples
+          - listitem [ref=e18]:
+            - link "Docs" [ref=e19] [cursor=pointer]:
+              - /url: /docs
+        - list [ref=e20]:
+          - listitem [ref=e21]:
+            - link "GitHub repository" [ref=e22] [cursor=pointer]:
+              - /url: https://github.com/picocss/pico
+              - img [ref=e23]
+          - listitem [ref=e25]:
+            - link "Twitter" [ref=e26] [cursor=pointer]:
+              - /url: https://x.com/picocss
+              - img [ref=e27]
+          - listitem [ref=e29]:
+            - link "Turn on dark mode" [ref=e30] [cursor=pointer]:
+              - /url: /docs
+              - img [ref=e31]
+  - main [ref=e35]:
+    - navigation "breadcrumb" [ref=e36]:
+      - list [ref=e37]:
+        - listitem [ref=e38]:
+          - link "Documentation" [ref=e39] [cursor=pointer]:
+            - /url: /docs
+            - img [ref=e40]
+            - text: Documentation
+          - text: ">"
+        - listitem [ref=e41]: Getting started
+    - complementary [ref=e42]:
+      - generic [ref=e43]:
+        - heading "Documentation" [level=2] [ref=e44]
+        - link "Close" [ref=e45] [cursor=pointer]:
+          - /url: /docs
+          - img [ref=e46]
+      - navigation [ref=e49]:
+        - group [ref=e50]:
+          - generic "Getting started" [ref=e51] [cursor=pointer]
+          - list [ref=e52]:
+            - listitem [ref=e53]:
+              - link "Quick start" [ref=e54] [cursor=pointer]:
+                - /url: /docs
+            - listitem [ref=e55]:
+              - link "Version picker New" [ref=e56] [cursor=pointer]:
+                - /url: /docs/version-picker
+                - text: Version picker
+                - mark [ref=e57]: New
+            - listitem [ref=e58]:
+              - link "Color schemes" [ref=e59] [cursor=pointer]:
+                - /url: /docs/color-schemes
+            - listitem [ref=e60]:
+              - link "Class-less version" [ref=e61] [cursor=pointer]:
+                - /url: /docs/classless
+            - listitem [ref=e62]:
+              - link "Conditional styling New" [ref=e63] [cursor=pointer]:
+                - /url: /docs/conditional
+                - text: Conditional styling
+                - mark [ref=e64]: New
+            - listitem [ref=e65]:
+              - link "RTL" [ref=e66] [cursor=pointer]:
+                - /url: /docs/rtl
+        - group [ref=e67]:
+          - generic "Customization" [ref=e68] [cursor=pointer]
+        - group [ref=e69]:
+          - generic "Layout" [ref=e70] [cursor=pointer]
+        - group [ref=e71]:
+          - generic "Content" [ref=e72] [cursor=pointer]
+        - group [ref=e73]:
+          - generic "Forms" [ref=e74] [cursor=pointer]
+        - group [ref=e75]:
+          - generic "Components" [ref=e76] [cursor=pointer]
+        - group [ref=e77]:
+          - generic "About" [ref=e78] [cursor=pointer]
+    - generic [ref=e79]:
+      - paragraph [ref=e80]: Getting started
+      - heading "Quick start" [level=1] [ref=e81]
+      - paragraph [ref=e82]:
+        - text: Link
+        - code [ref=e83]: pico.css
+        - text: manually or via CDN for a dependency-free setup, or use NPM or Composer for advanced usage.
+    - complementary [ref=e84]:
+      - navigation [ref=e85]:
+        - group [ref=e86]:
+          - generic "Content"
+          - list [ref=e87]:
+            - listitem [ref=e88]:
+              - link "Install manually" [ref=e89] [cursor=pointer]:
+                - /url: /docs#install-manually
+            - listitem [ref=e90]:
+              - link "Usage from CDN" [ref=e91] [cursor=pointer]:
+                - /url: /docs#usage-from-cdn
+            - listitem [ref=e92]:
+              - link "Install with NPM" [ref=e93] [cursor=pointer]:
+                - /url: /docs#install-with-npm
+            - listitem [ref=e94]:
+              - link "Install with Composer" [ref=e95] [cursor=pointer]:
+                - /url: /docs#install-with-composer
+            - listitem [ref=e96]:
+              - link "Starter HTML template" [ref=e97] [cursor=pointer]:
+                - /url: /docs#starter-html-template
+    - document [ref=e98]:
+      - generic [ref=e99]:
+        - paragraph [ref=e100]: "There are 4 ways to get started with pico.css:"
+        - heading "Install manually#" [level=2] [ref=e101]:
+          - text: Install manually
+          - link "#" [ref=e102] [cursor=pointer]:
+            - /url: "#install-manually"
+        - paragraph [ref=e103]:
+          - link "Download Pico" [ref=e104] [cursor=pointer]:
+            - /url: https://github.com/picocss/pico/archive/refs/heads/main.zip
+          - text: and link
+          - code [ref=e105]: /css/pico.min.css
+          - text: in the
+          - code [ref=e106]: <head>
+          - text: of your website.
+        - generic [ref=e107]:
+          - link "Copy code" [ref=e108] [cursor=pointer]:
+            - /url: /docs
+            - text: Copy to clipboard
+            - img
+          - code [ref=e110]: <link rel="stylesheet" href="css/pico.min.css">
+      - generic [ref=e111]:
+        - heading "Usage from CDN#" [level=2] [ref=e112]:
+          - text: Usage from CDN
+          - link "#" [ref=e113] [cursor=pointer]:
+            - /url: "#usage-from-cdn"
+        - paragraph [ref=e114]:
+          - text: Alternatively, you can use
+          - link "jsDelivr CDN" [ref=e115] [cursor=pointer]:
+            - /url: https://cdn.jsdelivr.net/npm/@picocss/pico@2/
+          - text: to link
+          - code [ref=e116]: pico.min.css
+          - text: .
+        - generic [ref=e117]:
+          - link "Copy code" [ref=e118] [cursor=pointer]:
+            - /url: /docs
+            - text: Copy to clipboard
+            - img
+          - code [ref=e120]:
+            - text: <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+            - text: ">"
+      - generic [ref=e121]:
+        - heading "Install with NPM#" [level=2] [ref=e122]:
+          - text: Install with NPM
+          - link "#" [ref=e123] [cursor=pointer]:
+            - /url: "#install-with-npm"
+        - generic [ref=e124]:
+          - link "Copy code" [ref=e125] [cursor=pointer]:
+            - /url: /docs
+            - text: Copy to clipboard
+            - img
+          - code [ref=e127]: npm install @picocss/pico
+        - paragraph [ref=e128]: Or
+        - generic [ref=e129]:
+          - link "Copy code" [ref=e130] [cursor=pointer]:
+            - /url: /docs
+            - text: Copy to clipboard
+            - img
+          - code [ref=e132]: yarn add @picocss/pico
+        - paragraph [ref=e133]:
+          - text: Then, import Pico into your SCSS file with
+          - link "@use" [ref=e134] [cursor=pointer]:
+            - /url: https://sass-lang.com/documentation/at-rules/use
+          - text: ":"
+        - generic [ref=e135]:
+          - link "Copy code" [ref=e136] [cursor=pointer]:
+            - /url: /docs
+            - text: Copy to clipboard
+            - img
+          - code [ref=e138]: "@use \"pico\";"
+        - paragraph [ref=e139]:
+          - text: Learn more about the
+          - link "customization with Sass" [ref=e140] [cursor=pointer]:
+            - /url: /docs/sass
+          - text: .
+      - generic [ref=e141]:
+        - heading "Install with Composer#" [level=2] [ref=e142]:
+          - text: Install with Composer
+          - link "#" [ref=e143] [cursor=pointer]:
+            - /url: "#install-with-composer"
+        - generic [ref=e144]:
+          - link "Copy code" [ref=e145] [cursor=pointer]:
+            - /url: /docs
+            - text: Copy to clipboard
+            - img
+          - code [ref=e147]: composer require picocss/pico
+      - generic [ref=e148]:
+        - heading "Starter HTML template#" [level=2] [ref=e149]:
+          - text: Starter HTML template
+          - link "#" [ref=e150] [cursor=pointer]:
+            - /url: "#starter-html-template"
+        - generic [ref=e151]:
+          - link "Copy code" [ref=e152] [cursor=pointer]:
+            - /url: /docs
+            - text: Copy to clipboard
+            - img
+          - code [ref=e154]:
+            - text: <!doctype html>
+            - text: <html lang="en"> <head> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1"> <meta name="color-scheme" content="light dark"> <link rel="stylesheet" href="css/pico.min.css"> <title>Hello world!</title> </head> <body> <main class="container"> <h1>Hello world!</h1> </main> </body>
+            - text: </html>
+      - paragraph [ref=e156]:
+        - link "Edit this page on GitHub" [ref=e157] [cursor=pointer]:
+          - /url: https://github.com/picocss/picocss.com/blob/main/app/routes/docs._index.jsx
+          - generic [ref=e158]:
+            - img [ref=e159]
+            - text: Edit this page on GitHub
+  - contentinfo [ref=e163]:
+    - generic [ref=e164]:
+      - generic [ref=e165]:
+        - img [ref=e166]
+        - navigation [ref=e170]:
+          - list [ref=e171]:
+            - listitem [ref=e172]:
+              - strong [ref=e173]: About
+            - listitem [ref=e174]:
+              - link "What’s new?" [ref=e175] [cursor=pointer]:
+                - /url: /docs/v2
+            - listitem [ref=e176]:
+              - link "Brand" [ref=e177] [cursor=pointer]:
+                - /url: /docs/brand
+            - listitem [ref=e178]:
+              - link "Mission" [ref=e179] [cursor=pointer]:
+                - /url: /docs/mission
+            - listitem [ref=e180]:
+              - link "Usage scenarios" [ref=e181] [cursor=pointer]:
+                - /url: /docs/usage-scenarios
+          - list [ref=e182]:
+            - listitem [ref=e183]:
+              - strong [ref=e184]: Docs
+            - listitem [ref=e185]:
+              - link "Quick start" [ref=e186] [cursor=pointer]:
+                - /url: /docs
+            - listitem [ref=e187]:
+              - link "Version picker" [ref=e188] [cursor=pointer]:
+                - /url: /docs/version-picker
+            - listitem [ref=e189]:
+              - link "Class-less version" [ref=e190] [cursor=pointer]:
+                - /url: /docs/classless
+            - listitem [ref=e191]:
+              - link "Form elements" [ref=e192] [cursor=pointer]:
+                - /url: /docs/forms
+          - list [ref=e193]:
+            - listitem [ref=e194]:
+              - strong [ref=e195]: Community
+            - listitem [ref=e196]:
+              - link "Issues" [ref=e197] [cursor=pointer]:
+                - /url: https://github.com/picocss/pico/issues
+            - listitem [ref=e198]:
+              - link "Discussions" [ref=e199] [cursor=pointer]:
+                - /url: https://github.com/picocss/pico/discussions
+            - listitem [ref=e200]:
+              - link "Help" [ref=e201] [cursor=pointer]:
+                - /url: https://github.com/picocss/pico/discussions/categories/help
+          - list [ref=e202]:
+            - listitem [ref=e203]:
+              - strong [ref=e204]: Examples
+            - listitem [ref=e205]:
+              - link "HTML" [ref=e206] [cursor=pointer]:
+                - /url: https://codesandbox.io/embed/4mrnhq?view=Editor+%2B+Preview&module=%2Findex.html
+            - listitem [ref=e207]:
+              - link "Class-less" [ref=e208] [cursor=pointer]:
+                - /url: https://codesandbox.io/embed/x4qtf8?view=Editor+%2B+Preview&module=%2Findex.html
+            - listitem [ref=e209]:
+              - link "React" [ref=e210] [cursor=pointer]:
+                - /url: https://codesandbox.io/p/devbox/github/picocss/examples/tree/master/v2-react-classless-login?embed=1&file=%2Fsrc%2Fmain.scss
+            - listitem [ref=e211]:
+              - link "All" [ref=e212] [cursor=pointer]:
+                - /url: /examples
+        - paragraph [ref=e213]:
+          - text: Designed and built by
+          - link "Lucas Larroche" [ref=e214] [cursor=pointer]:
+            - /url: https://lucaslarroche.com/
+          - text: with the help of our
+          - link "contributors" [ref=e215] [cursor=pointer]:
+            - /url: https://github.com/picocss/pico/graphs/contributors
+          - text: .
+        - list [ref=e216]:
+          - listitem [ref=e217]:
+            - link "GitHub" [ref=e218] [cursor=pointer]:
+              - /url: https://github.com/picocss/pico
+              - img [ref=e219]
+          - listitem [ref=e221]:
+            - link "Twitter" [ref=e222] [cursor=pointer]:
+              - /url: https://x.com/picocss
+              - img [ref=e223]
+          - listitem [ref=e225]:
+            - link "jsDelivr" [ref=e226] [cursor=pointer]:
+              - /url: https://www.jsdelivr.com/package/npm/@picocss/pico
+              - img [ref=e227]
+          - listitem [ref=e229]:
+            - link "NPM" [ref=e230] [cursor=pointer]:
+              - /url: https://www.npmjs.com/package/@picocss/pico
+              - img [ref=e231]
+      - generic [ref=e233]:
+        - paragraph [ref=e234]:
+          - text: Code licensed
+          - link "MIT" [ref=e235] [cursor=pointer]:
+            - /url: https://github.com/picocss/pico/blob/master/LICENSE.md
+          - text: ", docs"
+          - link "CC BY-SA 4.0" [ref=e236] [cursor=pointer]:
+            - /url: https://github.com/picocss/picocss.com/blob/main/LICENSE.md
+          - text: .
+        - paragraph [ref=e237]:
+          - text: Currently
+          - code [ref=e238]: v2.1.1
+          - text: .
