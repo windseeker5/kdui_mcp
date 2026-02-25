@@ -57,12 +57,10 @@ def _generate_stat_card(config):
     color = config.get("color", "primary")
     
     return f'''
-<div class="stats shadow">
-  <div class="stat">
-    <div class="stat-title">{title}</div>
-    <div class="stat-value text-{color}">{value}</div>
-    <div class="stat-desc">{description}</div>
-  </div>
+<div style="background:var(--b1, white); border:1px solid oklch(var(--b3)); border-radius:8px; box-shadow:0 1px 3px rgba(0,0,0,0.06); padding:1.5rem;">
+  <p class="text-sm text-base-content/60 mb-1">{title}</p>
+  <p class="text-2xl font-semibold text-{color}">{value}</p>
+  <p class="text-xs text-base-content/40 mt-1">{description}</p>
 </div>
 '''
 
@@ -142,7 +140,7 @@ def _generate_alert(config):
 
       var alert = document.createElement('div');
       alert.className = 'alert alert-' + type + ' shadow-lg';
-      alert.style.cssText = 'pointer-events:auto; opacity:0; transform:translateX(20px); transition:opacity 300ms ease, transform 300ms ease;';
+      alert.style.cssText = 'pointer-events:auto; opacity:0; transform:translateX(20px); transition:opacity 300ms ease, transform 300ms ease; border-radius:6px;';
 
       var icon = icons[type] || icons['info'];
       var closeBtn = dismissable
@@ -212,10 +210,30 @@ def _generate_button(config):
     text = config.get("text", "Button")
     variant = config.get("variant", "primary")  # primary, secondary, accent, ghost, link
     size = config.get("size", "md")  # sm, md, lg
-    
-    size_class = f"btn-{size}" if size != "md" else ""
-    
-    return f'<button class="btn btn-{variant} {size_class}">{text}</button>'
+
+    variant_styles = {
+        "primary":   "background:#2563EB; color:#fff; border:1px solid #2563EB;",
+        "secondary": "background:#6B7280; color:#fff; border:1px solid #6B7280;",
+        "accent":    "background:#059669; color:#fff; border:1px solid #059669;",
+        "ghost":     "background:transparent; color:#374151; border:1px solid #D1D5DB;",
+        "link":      "background:transparent; color:#2563EB; border:none; box-shadow:none; text-decoration:underline;",
+    }
+
+    size_styles = {
+        "sm": "height:32px; min-height:0; padding:0 12px; font-size:0.8rem;",
+        "md": "height:36px; min-height:0; padding:0 16px; font-size:0.875rem;",
+        "lg": "height:44px; min-height:0; padding:0 20px; font-size:0.9375rem;",
+    }
+
+    base_style = "border-radius:4px; font-weight:500; white-space:nowrap;"
+    v_style = variant_styles.get(variant, variant_styles["primary"])
+    s_style = size_styles.get(size, size_styles["md"])
+
+    hover_attrs = ""
+    if variant == "ghost":
+        hover_attrs = ' onmouseover="this.style.background=\'#F3F4F6\'" onmouseout="this.style.background=\'transparent\'"'
+
+    return f'<button class="btn" style="{base_style} {v_style} {s_style}"{hover_attrs}>{text}</button>'
 
 
 def _generate_card(config):
@@ -225,18 +243,18 @@ def _generate_card(config):
     has_actions = config.get("actions", False)
     
     card_html = '''
-<div class="card bg-base-100 shadow-xl">
-  <div class="card-body">
-    <h2 class="card-title">''' + title + '''</h2>
+<div style="background:var(--b1, white); border:1px solid oklch(var(--b3)); border-radius:8px; box-shadow:0 1px 3px rgba(0,0,0,0.06); overflow:hidden;">
+  <div class="p-6">
+    <h2 class="text-base font-semibold mb-2">''' + title + '''</h2>
     <p>''' + content + '''</p>
 '''
-    
+
     if has_actions:
-        card_html += '''    <div class="card-actions justify-end">
-      <button class="btn btn-primary">Action</button>
+        card_html += '''    <div class="flex justify-end mt-4">
+      <button class="btn" style="height:36px; min-height:0; padding:0 16px; font-size:0.875rem; border-radius:4px; font-weight:500; background:#2563EB; color:#fff; border:1px solid #2563EB; white-space:nowrap;">Action</button>
     </div>
 '''
-    
+
     card_html += '''  </div>
 </div>
 '''
@@ -251,16 +269,16 @@ def _generate_modal(config):
     
     return f'''
 <!-- Modal trigger button -->
-<label for="{modal_id}" class="btn">Open Modal</label>
+<label for="{modal_id}" class="btn" style="height:36px; min-height:0; padding:0 16px; font-size:0.875rem; border-radius:4px; font-weight:500; background:#2563EB; color:#fff; border:1px solid #2563EB; white-space:nowrap;">Open Modal</label>
 
 <!-- Modal -->
 <input type="checkbox" id="{modal_id}" class="modal-toggle" />
 <div class="modal">
-  <div class="modal-box">
+  <div class="modal-box" style="border-radius:8px;">
     <h3 class="font-bold text-lg">{title}</h3>
     <p class="py-4">{content}</p>
     <div class="modal-action">
-      <label for="{modal_id}" class="btn">Close</label>
+      <label for="{modal_id}" class="btn" style="height:36px; min-height:0; padding:0 16px; font-size:0.875rem; border-radius:4px; font-weight:500; background:transparent; color:#374151; border:1px solid #D1D5DB; white-space:nowrap;" onmouseover="this.style.background='#F3F4F6'" onmouseout="this.style.background='transparent'">Close</label>
     </div>
   </div>
 </div>
@@ -680,7 +698,7 @@ def _generate_tabs(config):
     for tab in tabs:
         checked = "checked" if tab.get("active", False) else ""
         tabs_html += f'''  <input type="radio" name="my_tabs" role="tab" class="tab" aria-label="{tab['label']}" {checked} />
-  <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
+  <div role="tabpanel" class="tab-content bg-base-100 border-base-300 p-6" style="border-radius:0 0 8px 8px;">
     {tab['content']}
   </div>
 '''

@@ -46,14 +46,14 @@ def _generate_login_form(action):
           <label class="label">
             <span class="label-text">Email</span>
           </label>
-          <input type="email" name="email" placeholder="email@example.com" class="input input-bordered w-full" required />
+          <input type="email" name="email" placeholder="email@example.com" class="input input-bordered w-full" style="border-radius:4px" required />
         </div>
-        
+
         <div class="form-control w-full mt-4">
           <label class="label">
             <span class="label-text">Password</span>
           </label>
-          <input type="password" name="password" placeholder="••••••••" class="input input-bordered w-full" required />
+          <input type="password" name="password" placeholder="••••••••" class="input input-bordered w-full" style="border-radius:4px" required />
           <label class="label">
             <a href="/forgot-password" class="label-text-alt link link-hover">Forgot password?</a>
           </label>
@@ -98,28 +98,28 @@ def _generate_register_form(action):
           <label class="label">
             <span class="label-text">Full Name</span>
           </label>
-          <input type="text" name="name" placeholder="John Doe" class="input input-bordered w-full" required />
+          <input type="text" name="name" placeholder="John Doe" class="input input-bordered w-full" style="border-radius:4px" required />
         </div>
         
         <div class="form-control w-full mt-4">
           <label class="label">
             <span class="label-text">Email</span>
           </label>
-          <input type="email" name="email" placeholder="email@example.com" class="input input-bordered w-full" required />
+          <input type="email" name="email" placeholder="email@example.com" class="input input-bordered w-full" style="border-radius:4px" required />
         </div>
-        
+
         <div class="form-control w-full mt-4">
           <label class="label">
             <span class="label-text">Password</span>
           </label>
-          <input type="password" name="password" placeholder="••••••••" class="input input-bordered w-full" required />
+          <input type="password" name="password" placeholder="••••••••" class="input input-bordered w-full" style="border-radius:4px" required />
         </div>
         
         <div class="form-control w-full mt-4">
           <label class="label">
             <span class="label-text">Confirm Password</span>
           </label>
-          <input type="password" name="confirm_password" placeholder="••••••••" class="input input-bordered w-full" required />
+          <input type="password" name="confirm_password" placeholder="••••••••" class="input input-bordered w-full" style="border-radius:4px" required />
         </div>
         
         <div class="form-control mt-4">
@@ -168,14 +168,14 @@ def _generate_contact_form(action):
             <label class="label">
               <span class="label-text">First Name</span>
             </label>
-            <input type="text" name="first_name" placeholder="John" class="input input-bordered w-full" required />
+            <input type="text" name="first_name" placeholder="John" class="input input-bordered w-full" style="border-radius:4px" required />
           </div>
           
           <div class="form-control w-full">
             <label class="label">
               <span class="label-text">Last Name</span>
             </label>
-            <input type="text" name="last_name" placeholder="Doe" class="input input-bordered w-full" required />
+            <input type="text" name="last_name" placeholder="Doe" class="input input-bordered w-full" style="border-radius:4px" required />
           </div>
         </div>
         
@@ -183,21 +183,21 @@ def _generate_contact_form(action):
           <label class="label">
             <span class="label-text">Email</span>
           </label>
-          <input type="email" name="email" placeholder="email@example.com" class="input input-bordered w-full" required />
+          <input type="email" name="email" placeholder="email@example.com" class="input input-bordered w-full" style="border-radius:4px" required />
         </div>
-        
+
         <div class="form-control w-full mt-4">
           <label class="label">
             <span class="label-text">Subject</span>
           </label>
-          <input type="text" name="subject" placeholder="How can we help?" class="input input-bordered w-full" required />
+          <input type="text" name="subject" placeholder="How can we help?" class="input input-bordered w-full" style="border-radius:4px" required />
         </div>
         
         <div class="form-control w-full mt-4">
           <label class="label">
             <span class="label-text">Message</span>
           </label>
-          <textarea name="message" placeholder="Your message here..." class="textarea textarea-bordered h-32" required></textarea>
+          <textarea name="message" placeholder="Your message here..." class="textarea textarea-bordered h-32" style="border-radius:4px" required></textarea>
         </div>
         
         {% if success %}
@@ -256,7 +256,7 @@ def _generate_custom_form(fields, method, action, inline):
             <label class="label">
               <span class="label-text">{label}</span>
             </label>
-            <input type="{field_type}" name="{field_name}" placeholder="{placeholder}" class="input input-bordered w-full" {required_attr} />
+            <input type="{field_type}" name="{field_name}" placeholder="{placeholder}" class="input input-bordered w-full" style="border-radius:4px" {required_attr} />
           </div>
 '''
         
@@ -266,7 +266,7 @@ def _generate_custom_form(fields, method, action, inline):
             <label class="label">
               <span class="label-text">{label}</span>
             </label>
-            <textarea name="{field_name}" placeholder="{placeholder}" class="textarea textarea-bordered h-24" {required_attr}></textarea>
+            <textarea name="{field_name}" placeholder="{placeholder}" class="textarea textarea-bordered h-24" style="border-radius:4px" {required_attr}></textarea>
           </div>
 '''
         
@@ -276,7 +276,7 @@ def _generate_custom_form(fields, method, action, inline):
             <label class="label">
               <span class="label-text">{label}</span>
             </label>
-            <select name="{field_name}" class="select select-bordered w-full" {required_attr}>
+            <select name="{field_name}" class="select select-bordered w-full" style="border-radius:4px" {required_attr}>
               <option value="">Select {label}</option>
 '''
             for option in options:
@@ -301,7 +301,7 @@ def _generate_custom_form(fields, method, action, inline):
             <label class="label">
               <span class="label-text">{label}</span>
             </label>
-            <input type="file" name="{field_name}" class="file-input file-input-bordered w-full" {required_attr} />
+            <input type="file" name="{field_name}" class="file-input file-input-bordered w-full" style="border-radius:4px" {required_attr} />
           </div>
 '''
     
