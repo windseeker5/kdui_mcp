@@ -71,14 +71,14 @@ def showcase():
     c['stat_revenue'] = add_component("stat_card", {
         "title": "Total Revenue",
         "value": "$45,231",
-        "description": "↑ 20.1% from last month",
-        "color": "primary"
+        "trend": "+20.1%",
+        "description": "from last month",
     })
     c['stat_users'] = add_component("stat_card", {
         "title": "Active Users",
         "value": "2,350",
-        "description": "↑ 10.5% from last week",
-        "color": "success"
+        "trend": "+10.5%",
+        "description": "from last week",
     })
 
     # --- Modal ---
@@ -217,12 +217,16 @@ def showcase():
         {"name": "updated", "label": "Last Updated", "sortable": True},
     ]
     table_data = [
-        {"name": "alpha-api", "status": "Active", "status_color": "success", "updated": "2026-02-15"},
-        {"name": "beta-dashboard", "status": "Draft", "status_color": "warning", "updated": "2026-02-12"},
-        {"name": "gamma-service", "status": "Archived", "status_color": "error", "updated": "2026-01-30"},
+        {"name": "alpha-api",       "status": "Active",   "status_color": "success",     "updated": "2026-02-15"},
+        {"name": "beta-dashboard",  "status": "Draft",    "status_color": "warning",     "updated": "2026-02-12"},
+        {"name": "gamma-service",   "status": "Archived", "status_color": "error",       "updated": "2026-01-30"},
+        {"name": "delta-worker",    "status": "Active",   "status_color": "success",     "updated": "2026-02-10"},
+        {"name": "epsilon-jobs",    "status": "Draft",    "status_color": "warning",     "updated": "2026-02-08"},
+        {"name": "zeta-gateway",    "status": "Active",   "status_color": "success",     "updated": "2026-02-05"},
+        {"name": "eta-scheduler",   "status": "Archived", "status_color": "secondary",   "updated": "2026-01-28"},
     ]
-    raw_table = create_table(table_columns, features=["search", "sort", "pagination"])
-    c['table'] = render_template_string(raw_table, data=table_data, total_rows=3)
+    raw_table = create_table(table_columns, features=["search", "sort", "pagination"], title="Projects", rows_per_page=5)
+    c['table'] = render_template_string(raw_table, data=table_data, total_rows=7)
 
     return render_template('showcase.html', c=c)
 

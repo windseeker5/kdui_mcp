@@ -53,14 +53,30 @@ def _generate_stat_card(config):
     """Generate a stat card component."""
     title = config.get("title", "Stat Title")
     value = config.get("value", "0")
-    description = config.get("description", "Description")
-    color = config.get("color", "primary")
-    
+    description = config.get("description", "")
+    trend = config.get("trend", "")  # e.g. "+20.1%" or "-1.3%"
+
+    icon_up = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>'
+    icon_down = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 17 13.5 8.5 8.5 13.5 2 7"/><polyline points="16 17 22 17 22 11"/></svg>'
+
+    trend_html = ""
+    if trend:
+        is_down = trend.startswith("-")
+        trend_color = "#EF4444" if is_down else "#10B981"
+        icon = icon_down if is_down else icon_up
+        desc_text = f'<span style="font-size:0.75rem; color:#9CA3AF;">{description}</span>' if description else ""
+        trend_html = f'''
+  <div style="display:flex; align-items:center; gap:6px; margin-top:6px;">
+    <span style="display:inline-flex; align-items:center; gap:3px; color:{trend_color}; font-size:0.75rem; font-weight:600;">{icon}{trend}</span>
+    {desc_text}
+  </div>'''
+    elif description:
+        trend_html = f'\n  <p style="font-size:0.75rem; color:#9CA3AF; margin-top:6px;">{description}</p>'
+
     return f'''
 <div style="background:var(--b1, white); border:1px solid oklch(var(--b3)); border-radius:8px; box-shadow:0 1px 3px rgba(0,0,0,0.06); padding:1.5rem;">
-  <p class="text-sm text-base-content/60 mb-1">{title}</p>
-  <p class="text-2xl font-semibold text-{color}">{value}</p>
-  <p class="text-xs text-base-content/40 mt-1">{description}</p>
+  <p style="font-size:0.875rem; color:#6B7280; margin-bottom:4px;">{title}</p>
+  <p style="font-size:1.5rem; font-weight:600; color:#111827;">{value}</p>{trend_html}
 </div>
 '''
 

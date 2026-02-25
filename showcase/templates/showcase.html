@@ -434,8 +434,8 @@
     config={
         "title": "Total Revenue",
         "value": "$45,231",
-        "description": "↑ 20.1% from last month",
-        "color": "primary"  # primary | success | warning | error | info
+        "trend": "+20.1%",       # positive = green ↗, negative = red ↘
+        "description": "from last month",
     }
 )</code></pre>
           </details>
@@ -700,10 +700,12 @@ create_form(
     features=["search", "sort", "pagination"],  # + "actions"
     rows_per_page=10,
     striped=True,
-    hoverable=True
+    hoverable=True,
+    title="Projects"
 )
 
-# In your Flask route, pass: data=my_list, total_rows=len(my_list)</code></pre>
+# In your Flask route, pass: data=my_list, total_rows=len(my_list)
+# Badge colors: success | warning | error | destructive | primary | secondary</code></pre>
           </details>
         </div>
       </section>
