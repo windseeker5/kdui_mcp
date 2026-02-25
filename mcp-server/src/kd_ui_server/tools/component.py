@@ -1264,16 +1264,16 @@ def _generate_pricing(config):
 ''' if popular else ""
         
         pricing_html += f'''
-      <div class="relative bg-base-100 border-2 {border_class} rounded-lg p-8 hover:shadow-xl transition-shadow duration-200">
+      <div class="relative bg-base-100 border-2 {border_class} rounded-lg p-8 hover:shadow-xl transition-shadow duration-200" style="display:flex; flex-direction:column;">
         {badge}
         <h3 class="text-2xl font-bold text-base-content mb-2">{name}</h3>
         <div class="mb-6">
           <span class="text-4xl font-bold text-base-content">{price}</span>
           <span class="text-base-content/60">/{period}</span>
         </div>
-        <ul class="space-y-3 mb-8">
+        <ul class="space-y-3 mb-8" style="flex:1;">
 '''
-        
+
         for feature in features:
             pricing_html += f'''
           <li class="flex items-center gap-2 text-base-content/80">
@@ -1281,7 +1281,7 @@ def _generate_pricing(config):
             <span>{feature}</span>
           </li>
 '''
-        
+
         btn_class = "btn-primary" if popular else "btn-outline"
         pricing_html += f'''
         </ul>
