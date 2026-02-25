@@ -262,19 +262,35 @@
         <div class="section-card">
           <div class="section-label">Component</div>
           <h2 class="text-base font-semibold mb-4">Alert</h2>
-          <div class="demo-wrap space-y-3">
-            {{ c.alert_info | safe }}
-            {{ c.alert_success | safe }}
-            {{ c.alert_warning | safe }}
-            {{ c.alert_error | safe }}
+          <p class="text-sm text-base-content/60 mb-3">
+            Toast flash notifications — fixed overlay, auto-dismiss, zero layout impact.
+            Alerts shown on page load have already dismissed; use buttons to re-trigger.
+          </p>
+
+          <!-- Hidden server-rendered alerts (show on load, auto-dismiss) -->
+          {{ c.alert_info | safe }}
+          {{ c.alert_success | safe }}
+          {{ c.alert_warning | safe }}
+          {{ c.alert_error | safe }}
+
+          <!-- Trigger buttons -->
+          <div class="demo-wrap flex flex-wrap gap-2">
+            <button onclick="kdShowAlert('info', 'This is an informational message.', {duration:4000})" class="btn btn-sm btn-info btn-outline">Show Info</button>
+            <button onclick="kdShowAlert('success', 'Operation completed successfully!', {duration:4000})" class="btn btn-sm btn-success btn-outline">Show Success</button>
+            <button onclick="kdShowAlert('warning', 'Please review before continuing.', {duration:4000})" class="btn btn-sm btn-warning btn-outline">Show Warning</button>
+            <button onclick="kdShowAlert('error', 'Something went wrong. Please try again.', {duration:4000})" class="btn btn-sm btn-error btn-outline">Show Error</button>
           </div>
+
           <details class="mcp-snippet mt-4">
             <summary>Show MCP usage</summary>
             <pre><code>add_component(
     component_type="alert",
     config={
         "message": "Operation completed successfully!",
-        "type": "success"  # info | success | warning | error
+        "type": "success",      # info | success | warning | error
+        "duration": 4000,       # ms before auto-dismiss (0 = persistent)
+        "position": "top-right", # top-right | top-center | top-left | bottom-*
+        "dismissable": True     # show × close button
     }
 )</code></pre>
           </details>

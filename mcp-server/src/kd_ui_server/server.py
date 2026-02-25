@@ -215,7 +215,7 @@ async def list_tools() -> list[Tool]:
 
             Available components:
             - stat_card: Metric display card with value, title, and trend
-            - alert: Information, success, warning, or error messages
+            - alert: Toast flash notification (fixed overlay, auto-dismisses). Supports type, duration, position, dismissable
             - badge: Status indicators and labels
             - button: Various button styles (primary, secondary, ghost, etc.)
             - card: Content container with optional header and footer

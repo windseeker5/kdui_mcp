@@ -68,23 +68,112 @@ def _generate_stat_card(config):
 
 
 def _generate_alert(config):
-    """Generate an alert component."""
+    """Generate a toast flash notification component."""
+    import uuid
     message = config.get("message", "This is an alert message")
     alert_type = config.get("type", "info")  # info, success, warning, error
-    
+    duration = config.get("duration", 4000)   # ms, 0 = persistent
+    position = config.get("position", "top-right")
+    dismissable = config.get("dismissable", True)
+
+    alert_id = f"kd-alert-{uuid.uuid4().hex[:8]}"
+
+    position_styles = {
+        "top-right":    "top:16px; right:16px;",
+        "top-left":     "top:16px; left:16px;",
+        "top-center":   "top:16px; left:0; right:0; margin:0 auto; max-width:400px;",
+        "bottom-right": "bottom:16px; right:16px;",
+        "bottom-left":  "bottom:16px; left:16px;",
+        "bottom-center":"bottom:16px; left:0; right:0; margin:0 auto; max-width:400px;",
+    }
+    pos_style = position_styles.get(position, position_styles["top-right"])
+    container_id = f"kd-toast-container-{position}"
+
     icons = {
-        "info": '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>',
+        "info":    '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>',
         "success": '<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>',
         "warning": '<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>',
-        "error": '<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>',
+        "error":   '<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>',
     }
-    
-    return f'''
-<div class="alert alert-{alert_type}">
-  {icons.get(alert_type, icons['info'])}
-  <span>{message}</span>
-</div>
-'''
+
+    return f'''<div id="{alert_id}" style="display:none" aria-hidden="true"></div>
+<script>
+(function() {{
+  // Register global helpers only once
+  if (!window.kdDismissAlert) {{
+    window.kdDismissAlert = function(el) {{
+      el.style.opacity = '0';
+      el.style.transform = 'translateX(20px)';
+      setTimeout(function() {{ el.remove(); }}, 300);
+    }};
+  }}
+
+  if (!window.kdShowAlert) {{
+    window.kdShowAlert = function(type, message, opts) {{
+      opts = opts || {{}};
+      var duration   = (opts.duration !== undefined) ? opts.duration : 4000;
+      var position   = opts.position || 'top-right';
+      var dismissable = (opts.dismissable !== undefined) ? opts.dismissable : true;
+
+      var posStyles = {{
+        'top-right':    'top:16px; right:16px;',
+        'top-left':     'top:16px; left:16px;',
+        'top-center':   'top:16px; left:0; right:0; margin:0 auto; max-width:400px;',
+        'bottom-right': 'bottom:16px; right:16px;',
+        'bottom-left':  'bottom:16px; left:16px;',
+        'bottom-center':'bottom:16px; left:0; right:0; margin:0 auto; max-width:400px;'
+      }};
+
+      var icons = {{
+        'info':    '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>',
+        'success': '<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>',
+        'warning': '<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>',
+        'error':   '<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>'
+      }};
+
+      var containerId = 'kd-toast-container-' + position;
+      var container = document.getElementById(containerId);
+      if (!container) {{
+        container = document.createElement('div');
+        container.id = containerId;
+        container.style.cssText = 'position:fixed; z-index:9999; pointer-events:none; display:flex; flex-direction:column; gap:8px; width:360px; ' + (posStyles[position] || posStyles['top-right']);
+        document.body.appendChild(container);
+      }}
+
+      var alert = document.createElement('div');
+      alert.className = 'alert alert-' + type + ' shadow-lg';
+      alert.style.cssText = 'pointer-events:auto; opacity:0; transform:translateX(20px); transition:opacity 300ms ease, transform 300ms ease;';
+
+      var icon = icons[type] || icons['info'];
+      var closeBtn = dismissable
+        ? '<button onclick="kdDismissAlert(this.closest(\\'.alert\\'))" style="margin-left:auto; background:none; border:none; cursor:pointer; padding:0; line-height:1; font-size:1.25rem; opacity:0.7;" aria-label="Close">&times;</button>'
+        : '';
+      alert.innerHTML = icon + '<span style="flex:1">' + message + '</span>' + closeBtn;
+
+      container.appendChild(alert);
+
+      // Animate in
+      requestAnimationFrame(function() {{
+        requestAnimationFrame(function() {{
+          alert.style.opacity = '1';
+          alert.style.transform = 'translateX(0)';
+        }});
+      }});
+
+      if (duration > 0) {{
+        setTimeout(function() {{ window.kdDismissAlert(alert); }}, duration);
+      }}
+    }};
+  }}
+
+  // Show this alert immediately
+  window.kdShowAlert('{alert_type}', '{message}', {{
+    duration: {duration},
+    position: '{position}',
+    dismissable: {'true' if dismissable else 'false'}
+  }});
+}})();
+</script>'''
 
 
 def _generate_badge(config):
